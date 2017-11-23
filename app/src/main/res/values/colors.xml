@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#30b9a3</color>
+    <color name="colorPrimaryDark">#21b49f</color>
+    <color name="colorAccent">#808080</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transe">#00000000</color>
+    <color name="side_bar_text">#4A4A4A</color>
+    <color name="shadow_bg">#66000000</color>
+    <color name="super_light_grey">#9f9f9f</color>
+    <color name="line">#ededed</color>
+</resources>
