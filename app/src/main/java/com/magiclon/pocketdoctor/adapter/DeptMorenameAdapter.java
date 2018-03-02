@@ -17,7 +17,7 @@ import com.magiclon.pocketdoctor.model.Department;
 import java.util.List;
 
 /**
- * Created by MagicLon on 2017/7/18.
+ * Created by MagicLon on 2018/3/2.
  */
 public class DeptMorenameAdapter extends RecyclerView.Adapter<DeptMorenameAdapter.ViewHolder> {
     private List<Department> mList;

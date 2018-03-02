@@ -6,7 +6,7 @@ import java.util.List;
  * 作者：MagicLon
  * 时间：2018/3/2 002
  * 邮箱：1348149485@qq.com
- * 描述：
+ * 描述：三种集合放一起
  */
 
 public class DeptDocHosListBean {

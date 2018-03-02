@@ -61,6 +61,7 @@
                     android:textSize="14dp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -103,6 +104,7 @@
                 android:layout_centerVertical="true"
                 android:padding="10dp"
                 android:src="@mipmap/back" />
+
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
@@ -110,7 +112,7 @@
                 android:layout_centerInParent="true"
                 android:textColor="@color/white"
                 android:textSize="16dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>

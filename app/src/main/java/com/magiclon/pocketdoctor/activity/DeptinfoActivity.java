@@ -27,7 +27,9 @@ import com.youth.banner.Transformer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+/*
+科室详情
+ */
 public class DeptinfoActivity extends AppCompatActivity {
 
     private Banner banner;

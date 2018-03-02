@@ -18,6 +18,9 @@ import com.magiclon.pocketdoctor.model.Hospital;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 更多科室
+ */
 public class MoreDeptActivity extends AppCompatActivity {
 
     private TextView tv_title;

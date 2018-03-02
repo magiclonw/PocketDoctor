@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by MagicLon on 2017/7/18.
+ * Created by MagicLon on 2018/3/2.
  */
 public class DeptnameAdapter extends RecyclerView.Adapter<DeptnameAdapter.ViewHolder> {
     private List<Department> mList;
