@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.model.Notify;
-import com.youfucheck.commoncodelib.SharePreferenceUtil;
+import com.magiclon.pocketdoctor.tools.SharePreferenceUtil;
 
 import java.util.List;
 
@@ -51,7 +51,6 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.ViewHolder
             public void onClick(View v) {
                 int pos = vh.getLayoutPosition();
                 mOnItemClickListener.onItemClick(vh.itemView, pos);
-                Log.e("22222222","2222222222222");
             }
         });
         return vh;
@@ -59,7 +58,7 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.name.setText(SharePreferenceUtil.INSTANCE.getString(mContext,"cur_city")+mList.get(position).getName());
+        holder.name.setText(mList.get(position).getName());
         holder.type.setText(mList.get(position).getType());
     }
 

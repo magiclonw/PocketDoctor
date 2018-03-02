@@ -1,6 +1,7 @@
 package com.magiclon.pocketdoctor.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,19 +11,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.magiclon.pocketdoctor.R;
-import com.magiclon.pocketdoctor.model.Hospital;
-import com.magiclon.pocketdoctor.tools.SharePreferenceUtil;
+import com.magiclon.pocketdoctor.activity.MoreHospitalActivity;
+import com.magiclon.pocketdoctor.model.Department;
 
 import java.util.List;
 
 /**
  * Created by MagicLon on 2017/7/18.
  */
-public class HospitalMoreAdapter extends RecyclerView.Adapter<HospitalMoreAdapter.ViewHolder> {
-    private List<Hospital> mList;
+public class DeptMorenameAdapter extends RecyclerView.Adapter<DeptMorenameAdapter.ViewHolder> {
+    private List<Department> mList;
     private Context mContext;
 
-    public HospitalMoreAdapter(List<Hospital> list, Context context) {
+    public DeptMorenameAdapter(List<Department> list, Context context) {
         this.mContext = context;
         this.mList = list;
     }
@@ -42,7 +43,7 @@ public class HospitalMoreAdapter extends RecyclerView.Adapter<HospitalMoreAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_hospital, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_deptment, parent, false);
         final ViewHolder vh = new ViewHolder(view);
         return vh;
     }
@@ -55,8 +56,15 @@ public class HospitalMoreAdapter extends RecyclerView.Adapter<HospitalMoreAdapte
                 mOnItemClickListener.onItemClick(view,position);
             }
         });
-        holder.tv_name.setText(mList.get(position).getHname());
-        holder.tv_addr.setText(mList.get(position).getDetail());
+        holder.tv_name.setText(mList.get(position).getDeptname());
+        holder.tv_addr.setText(mList.get(position).getHname());
+        holder.tv_hospital_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, MoreHospitalActivity.class);
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override

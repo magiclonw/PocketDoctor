@@ -11,15 +11,15 @@ import android.widget.TextView;
 import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.model.Doctor;
-import com.youfucheck.commoncodelib.SharePreferenceUtil;
+import com.magiclon.pocketdoctor.tools.SharePreferenceUtil;
 
 public class DoctorInfoActivity extends AppCompatActivity {
 
     private TextView name;
-    private TextView deptandlevel;
-    private TextView hospital;
-    private TextView tv_shanchang;
+    private TextView level;
+    private TextView hospitalanddept;
     private TextView tv_info;
+    private TextView tv_time;
     private NestedScrollView sv_doctorinfo;
     private Toolbar toolbar;
     private Doctor doctor;
@@ -45,17 +45,17 @@ public class DoctorInfoActivity extends AppCompatActivity {
 
     private void initView() {
         name = (TextView) findViewById(R.id.name);
-        deptandlevel = (TextView) findViewById(R.id.deptandlevel);
-        hospital = (TextView) findViewById(R.id.hospital);
-        tv_shanchang = (TextView) findViewById(R.id.tv_shanchang);
+        level = (TextView) findViewById(R.id.tv_level);
+        tv_time = (TextView) findViewById(R.id.tv_time);
+        hospitalanddept = (TextView) findViewById(R.id.hospitalanddept);
         tv_info = (TextView) findViewById(R.id.tv_info);
         sv_doctorinfo = (NestedScrollView) findViewById(R.id.sv_doctorinfo);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         name.setText(doctor.getName());
-        deptandlevel.setText(doctor.getDepartment() + "/" + doctor.getLevel());
-        hospital.setText(SharePreferenceUtil.INSTANCE.getString(this, "cur_city") + doctor.getHospital());
-        tv_shanchang.setText(doctor.getShanchang());
+        level.setText( doctor.getLevel());
+        hospitalanddept.setText(doctor.getHospital()+"-"+doctor.getDepartment());
         tv_info.setText(doctor.getInfo());
+        tv_time.setText(doctor.getTime());
         back = (ImageView) findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override

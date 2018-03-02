@@ -25,14 +25,15 @@ public class MoreDoctorActivity extends AppCompatActivity {
     private RecyclerView rv_moredoctor;
     private List<Doctor> dlist = new ArrayList<>();
     private DoctorMoreAdapter dadapter;
-    private DBManager dbManager;
+//    private DBManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moredoctor);
-        dbManager = new DBManager(this);
-        dbManager.copyDBFile();
+        dlist= (List<Doctor>) getIntent().getExtras().get("info");
+//        dbManager = new DBManager(this);
+//        dbManager.copyDBFile();
         initView();
     }
 
@@ -40,7 +41,7 @@ public class MoreDoctorActivity extends AppCompatActivity {
         tv_title = (TextView) findViewById(R.id.tv_title);
         iv_left = (ImageView) findViewById(R.id.iv_left);
         rv_moredoctor = (RecyclerView) findViewById(R.id.rv_moredoctor);
-        dlist.addAll(dbManager.getAllDoctor());
+//        dlist.addAll(dbManager.getAllDoctor(""));
         dadapter = new DoctorMoreAdapter(dlist, this);
         rv_moredoctor.setLayoutManager(new LinearLayoutManager(this));
         rv_moredoctor.setAdapter(dadapter);

@@ -7,36 +7,22 @@ import java.io.Serializable;
  */
 
 public class Hospital implements Serializable{
-    String hospital;
-    String info;
     String hid;
-    String addr;
+    String hname;
+    String info;
+    String detail;
+    String department;
+    String machine;
+    String guide;
 
-    public Hospital() {
-
-    }
-
-    public Hospital(String hospital, String info, String hid, String addr) {
-        this.hospital = hospital;
-        this.info = info;
+    public Hospital(String hid, String hname, String info, String detail, String department, String machine, String guide) {
         this.hid = hid;
-        this.addr = addr;
-    }
-
-    public String getHospital() {
-        return hospital;
-    }
-
-    public void setHospital(String hospital) {
-        this.hospital = hospital;
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    public void setInfo(String info) {
+        this.hname = hname;
         this.info = info;
+        this.detail = detail;
+        this.department = department;
+        this.machine = machine;
+        this.guide = guide;
     }
 
     public String getHid() {
@@ -47,21 +33,51 @@ public class Hospital implements Serializable{
         this.hid = hid;
     }
 
-    public String getAddr() {
-        return addr;
+    public String getHname() {
+        return hname;
     }
 
-    public void setAddr(String addr) {
-        this.addr = addr;
+    public void setHname(String hname) {
+        this.hname = hname;
     }
 
-    @Override
-    public String toString() {
-        return "Hospital{" +
-                "Hospital='" + hospital + '\'' +
-                ", info='" + info + '\'' +
-                ", hid='" + hid + '\'' +
-                ", addr='" + addr + '\'' +
-                '}';
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getMachine() {
+        return machine;
+    }
+
+    public void setMachine(String machine) {
+        this.machine = machine;
+    }
+
+    public String getGuide() {
+        return guide;
+    }
+
+    public void setGuide(String guide) {
+        this.guide = guide;
     }
 }

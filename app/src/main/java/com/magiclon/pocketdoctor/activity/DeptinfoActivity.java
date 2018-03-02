@@ -4,24 +4,23 @@ import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
+import com.magiclon.pocketdoctor.model.Department;
 import com.magiclon.pocketdoctor.model.Hospital;
 import com.magiclon.pocketdoctor.tools.DensityUtil;
 import com.magiclon.pocketdoctor.tools.GlideImageLoader;
-import com.magiclon.pocketdoctor.tools.SharePreferenceUtil;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 
 import java.util.Arrays;
 
-public class HospitalinfoActivity extends AppCompatActivity {
+public class DeptinfoActivity extends AppCompatActivity {
 
     private Banner banner;
     private TextView tv_addr;
@@ -33,7 +32,7 @@ public class HospitalinfoActivity extends AppCompatActivity {
     private NestedScrollView sv_doctorinfo;
     private ImageView back;
     private Toolbar toolbar;
-    private Hospital hospital;
+    private Department department;
     private String imgs[] = {"http://m1.biz.itc.cn/pic/new/n/80/78/Img7307880_n.jpg", "http://img.taopic.com/uploads/allimg/140222/240403-14022212200685.jpg"};
     private TextView tv_name;
     private int barheight = 0;
@@ -42,8 +41,8 @@ public class HospitalinfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hospitalinfo);
-        hospital = (Hospital) getIntent().getExtras().get("info");
+        setContentView(R.layout.activity_deptinfo);
+        department = (Department) getIntent().getExtras().get("info");
         ImmersionBar.with(this)
                 .titleBar(findViewById(R.id.toolbar), false)
                 .transparentBar()
@@ -56,11 +55,7 @@ public class HospitalinfoActivity extends AppCompatActivity {
         tv_name = (TextView) findViewById(R.id.tv_name);
         tv_title = (TextView) findViewById(R.id.tv_title);
         banner = (Banner) findViewById(R.id.banner);
-        tv_addr = (TextView) findViewById(R.id.tv_addr);
         tv_info = (TextView) findViewById(R.id.tv_info);
-        tv_hospital_dept = (TextView) findViewById(R.id.tv_hospital_dept);
-        tv_hospital_machine = (TextView) findViewById(R.id.tv_hospital_machine);
-        tv_hospital_guide = (TextView) findViewById(R.id.tv_hospital_guide);
         sv_doctorinfo = (NestedScrollView) findViewById(R.id.sv_doctorinfo);
         back = (ImageView) findViewById(R.id.back);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -99,13 +94,9 @@ public class HospitalinfoActivity extends AppCompatActivity {
                 changeToolBg(scrolled);
             }
         });
-        tv_name.setText(hospital.getHname());
-        tv_title.setText(hospital.getHname());
-        tv_addr.setText(hospital.getInfo());
-        tv_info.setText(hospital.getDetail());
-        tv_hospital_dept.setText(hospital.getDepartment());
-        tv_hospital_machine.setText(hospital.getMachine());
-        tv_hospital_guide.setText(hospital.getGuide());
+        tv_name.setText(department.getHname()+"-"+department.getDeptname());
+        tv_title.setText(department.getHname()+"-"+department.getDeptname());
+        tv_info.setText(department.getDeptinfo());
     }
 
     private void changeToolBg(boolean scrolled) {

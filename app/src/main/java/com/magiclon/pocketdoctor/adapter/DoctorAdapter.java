@@ -2,6 +2,7 @@ package com.magiclon.pocketdoctor.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +14,9 @@ import android.widget.TextView;
 import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.activity.MoreDoctorActivity;
 import com.magiclon.pocketdoctor.model.Doctor;
-import com.youfucheck.commoncodelib.SharePreferenceUtil;
+import com.magiclon.pocketdoctor.tools.SharePreferenceUtil;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -66,12 +68,15 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
             holder.tv_doctor_more.setVisibility(View.GONE);
         }
         holder.tv_dept.setText(mList.get(position).getDepartment());
-        holder.tv_hos.setText(SharePreferenceUtil.INSTANCE.getString(mContext, "cur_city") + mList.get(position).getHospital());
+        holder.tv_hos.setText( mList.get(position).getHospital());
         holder.tv_top.setText(mList.get(position).getName() + "  " + mList.get(position).getLevel());
         holder.tv_doctor_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, MoreDoctorActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("info", (Serializable) mList);
+                intent.putExtras(bundle);
                 mContext.startActivity(intent);
             }
         });

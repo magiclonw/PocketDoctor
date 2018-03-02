@@ -54,7 +54,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:textSize="16dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -66,11 +68,11 @@
                     android:id="@+id/tv_hos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxWidth="100dp"
+                    android:ellipsize="middle"
+                    android:maxWidth="185dp"
                     android:singleLine="true"
                     android:textColor="@color/super_light_grey"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
                 <View
                     android:layout_width="1dp"
@@ -85,10 +87,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:maxWidth="100dp"
                     android:singleLine="true"
                     android:textColor="@color/super_light_grey"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -104,7 +105,7 @@
         android:layout_height="wrap_content"
         android:text="查看更多"
         android:textColor="@color/side_bar_text"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:padding="10dp"
         android:gravity="center"
         android:visibility="gone"

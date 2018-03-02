@@ -8,6 +8,8 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.magiclon.pocketdoctor.model.City;
+import com.magiclon.pocketdoctor.model.Department;
+import com.magiclon.pocketdoctor.model.DeptDocHosListBean;
 import com.magiclon.pocketdoctor.model.Doctor;
 import com.magiclon.pocketdoctor.model.Hospital;
 import com.magiclon.pocketdoctor.model.Notify;
@@ -33,6 +35,7 @@ public class DBManager {
     private static final String TABLE_NAME_NOTIFY = "notify";
     private static final String TABLE_NAME_DOCTOR = "doctor";
     private static final String TABLE_NAME_HOSPITAL = "hospital";
+    private static final String TABLE_NAME_DEPARTMENT = "department";
     private static final String NAME = "name";
     private static final String PINYIN = "pinyin";
     private static final int BUFFER_SIZE = 1024;
@@ -124,13 +127,19 @@ public class DBManager {
      * @return
      */
     public List<Notify> getAllNotify(String edt) {
+        StringBuilder stringBuilder=new StringBuilder();
+        stringBuilder.append("%");
+        for (int i = 0; i <edt.length() ; i++) {
+            stringBuilder.append(edt.charAt(i)+"%");
+        }
+        Log.e("*****",stringBuilder.toString());
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
-        Cursor cursor = db.rawQuery("select * from " + TABLE_NAME_NOTIFY + " where name like '%" + edt + "%'", null);
+        Cursor cursor = db.rawQuery("select name,type from " + TABLE_NAME_NOTIFY + " where keyword like '" + stringBuilder.toString() + "'", null);
         List<Notify> result = new ArrayList<>();
         Notify notify;
         while (cursor.moveToNext()) {
-            String name = cursor.getString(cursor.getColumnIndex(NAME));
-            String type = cursor.getString(cursor.getColumnIndex("type"));
+            String name = cursor.getString(0);
+            String type = cursor.getString(1);
             notify = new Notify(name, type);
             result.add(notify);
         }
@@ -144,19 +153,23 @@ public class DBManager {
      *
      * @return
      */
-    public List<Doctor> getAllDoctor() {
+    public List<Doctor> getAllDoctor(String dname) {
+        String sqlwhere = "";
+        if (!"".equals(dname)) {
+            sqlwhere = " where name='" + dname + "'";
+        }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
-        Cursor cursor = db.rawQuery("select * from " + TABLE_NAME_DOCTOR, null);
+        Cursor cursor = db.rawQuery("select * from " + TABLE_NAME_DOCTOR + sqlwhere, null);
         List<Doctor> result = new ArrayList<>();
         Doctor doctor;
         while (cursor.moveToNext()) {
-            String name = cursor.getString(cursor.getColumnIndex(NAME));
-            String level = cursor.getString(cursor.getColumnIndex("level"));
-            String hospital = cursor.getString(cursor.getColumnIndex("hospital"));
-            String department = cursor.getString(cursor.getColumnIndex("department"));
-            String info = cursor.getString(cursor.getColumnIndex("info"));
-            String shanchang = cursor.getString(cursor.getColumnIndex("shanchang"));
-            doctor = new Doctor(name, level, hospital, department, info, shanchang);
+            String name = cursor.getString(0);
+            String level = cursor.getString(1);
+            String hospital = cursor.getString(2);
+            String department = cursor.getString(3);
+            String info = cursor.getString(4);
+            String time = cursor.getString(5);
+            doctor = new Doctor(name, level, hospital, department, info, time);
             result.add(doctor);
         }
         cursor.close();
@@ -165,26 +178,92 @@ public class DBManager {
     }
 
     /**
-     * 读取所有医生
+     * 读取所有医院
      *
      * @return
      */
-    public List<Hospital> getAllHospital() {
+    public List<Hospital> getAllHospital(String name) {
+        String sqlwhere = "";
+        if (!"".equals(name)) {
+            sqlwhere = " where hname='" + name + "'";
+        }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
-        Cursor cursor = db.rawQuery("select * from " + TABLE_NAME_HOSPITAL, null);
+        Cursor cursor = db.rawQuery("select * from " + TABLE_NAME_HOSPITAL + sqlwhere, null);
         List<Hospital> result = new ArrayList<>();
         Hospital hospital;
         while (cursor.moveToNext()) {
-            String name = cursor.getString(cursor.getColumnIndex("hospital"));
-            String info = cursor.getString(cursor.getColumnIndex("info"));
-            String hid = cursor.getString(cursor.getColumnIndex("hid"));
-            String addr = cursor.getString(cursor.getColumnIndex("addr"));
-            hospital = new Hospital(name, info, hid, addr);
+            String hid = cursor.getString(0);
+            String hname = cursor.getString(1);
+            String info = cursor.getString(2);
+            String detail = cursor.getString(3);
+            String department = cursor.getString(4);
+            String machine = cursor.getString(5);
+            String guide = cursor.getString(6);
+
+            hospital = new Hospital(hid, hname, info, detail, department, machine, guide);
             result.add(hospital);
         }
         cursor.close();
         db.close();
         return result;
+    }
+
+    /**
+     * 读取所有科室
+     *
+     * @return
+     */
+    public List<Department> getAllDept(String hospitalname, String dname) {
+        String sqlwhere = "";
+        if (!"".equals(hospitalname)) {
+            sqlwhere = " where hname='" + hospitalname + "' and deptname='" + dname + "'";
+        }
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
+        Cursor cursor = db.rawQuery("select * from " + TABLE_NAME_DEPARTMENT + sqlwhere, null);
+        List<Department> result = new ArrayList<>();
+        Department department;
+        while (cursor.moveToNext()) {
+            String deptid = cursor.getString(0);
+            String deptname = cursor.getString(1);
+            String hid = cursor.getString(2);
+            String hname = cursor.getString(3);
+            String deptinfo = cursor.getString(4);
+            department = new Department(deptid, deptname, hid, hname, deptinfo);
+            result.add(department);
+        }
+        cursor.close();
+        db.close();
+        return result;
+    }
+
+    /**
+     * 读取所有医生，科室，医院
+     *
+     * @return
+     */
+    public DeptDocHosListBean getAllInfo(String edt) {
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
+        Cursor cursor = db.rawQuery("select name,type from " + TABLE_NAME_NOTIFY + " where keyword like '%" + edt + "%'", null);
+        List<Doctor> doctors = new ArrayList<>();
+        List<Department> departments = new ArrayList<>();
+        List<Hospital> hospitals = new ArrayList<>();
+        DeptDocHosListBean deptdochoslistbean;
+        while (cursor.moveToNext()) {
+            String name = cursor.getString(0);
+            String type = cursor.getString(1);
+            if (type.equals("医生")) {
+                doctors.addAll(getAllDoctor(name));
+            } else if (type.equals("医院")) {
+                hospitals.addAll(getAllHospital(name));
+            } else if (type.equals("科室")) {
+                String sname[]=name.split("-");
+                departments.addAll(getAllDept(sname[0],sname[1]));
+            }
+        }
+        deptdochoslistbean = new DeptDocHosListBean(doctors, departments, hospitals);
+        cursor.close();
+        db.close();
+        return deptdochoslistbean;
     }
 
     public void insertHistory(String name) {

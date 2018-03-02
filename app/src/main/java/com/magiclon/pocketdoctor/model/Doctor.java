@@ -12,18 +12,18 @@ public class Doctor implements Serializable{
     String hospital;
     String department;
     String info;
-    String shanchang;
+    String time;
 
     public Doctor() {
     }
 
-    public Doctor(String name, String level, String hospital, String department, String info, String shanchang) {
+    public Doctor(String name, String level, String hospital, String department, String info, String time) {
         this.name = name;
         this.level = level;
         this.hospital = hospital;
         this.department = department;
         this.info = info;
-        this.shanchang = shanchang;
+        this.time = time;
     }
 
     public String getName() {
@@ -67,11 +67,19 @@ public class Doctor implements Serializable{
     }
 
     public String getShanchang() {
-        return shanchang;
+        return time;
     }
 
     public void setShanchang(String shanchang) {
-        this.shanchang = shanchang;
+        this.time = shanchang;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     @Override
@@ -82,7 +90,7 @@ public class Doctor implements Serializable{
                 ", hospital='" + hospital + '\'' +
                 ", department='" + department + '\'' +
                 ", info='" + info + '\'' +
-                ", shanchang='" + shanchang + '\'' +
+                ", time='" + time + '\'' +
                 '}';
     }
 }

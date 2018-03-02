@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="相关医院"
+            android:text="相关科室"
             android:textColor="@color/black"
             android:textSize="16dp" />
     </LinearLayout>
@@ -41,7 +41,7 @@
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/fhospital" />
+            android:src="@mipmap/dept" />
 
         <LinearLayout
             android:layout_width="match_parent"

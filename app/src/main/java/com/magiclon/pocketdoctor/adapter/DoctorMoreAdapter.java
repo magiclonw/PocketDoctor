@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.model.Doctor;
-import com.youfucheck.commoncodelib.SharePreferenceUtil;
+import com.magiclon.pocketdoctor.tools.SharePreferenceUtil;
 
 import java.util.List;
 
@@ -54,7 +54,7 @@ public class DoctorMoreAdapter extends RecyclerView.Adapter<DoctorMoreAdapter.Vi
             }
         });
         holder.tv_dept.setText(mList.get(position).getDepartment());
-        holder.tv_hos.setText(SharePreferenceUtil.INSTANCE.getString(mContext, "cur_city") + mList.get(position).getHospital());
+        holder.tv_hos.setText( mList.get(position).getHospital());
         holder.tv_top.setText(mList.get(position).getName() + "  " + mList.get(position).getLevel());
     }
 
