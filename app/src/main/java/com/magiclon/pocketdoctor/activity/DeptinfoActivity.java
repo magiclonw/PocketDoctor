@@ -1,8 +1,11 @@
 package com.magiclon.pocketdoctor.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,7 +13,10 @@ import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
+import com.magiclon.pocketdoctor.adapter.DoctorMoreAdapter;
+import com.magiclon.pocketdoctor.db.DBManager;
 import com.magiclon.pocketdoctor.model.Department;
+import com.magiclon.pocketdoctor.model.Doctor;
 import com.magiclon.pocketdoctor.model.Hospital;
 import com.magiclon.pocketdoctor.tools.DensityUtil;
 import com.magiclon.pocketdoctor.tools.GlideImageLoader;
@@ -18,7 +24,9 @@ import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class DeptinfoActivity extends AppCompatActivity {
 
@@ -37,6 +45,10 @@ public class DeptinfoActivity extends AppCompatActivity {
     private TextView tv_name;
     private int barheight = 0;
     private boolean isscrolled = false;
+    private DBManager dbManager;
+    private List<Doctor> doctorList =new ArrayList<>();
+    private RecyclerView rv_doctorlist;
+    private DoctorMoreAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +59,8 @@ public class DeptinfoActivity extends AppCompatActivity {
                 .titleBar(findViewById(R.id.toolbar), false)
                 .transparentBar()
                 .init();
+        dbManager=new DBManager(this);
+        dbManager.copyDBFile();
         barheight = DensityUtil.Companion.dp2px(this, 200f);
         initView();
     }
@@ -54,6 +68,7 @@ public class DeptinfoActivity extends AppCompatActivity {
     private void initView() {
         tv_name = (TextView) findViewById(R.id.tv_name);
         tv_title = (TextView) findViewById(R.id.tv_title);
+        rv_doctorlist = (RecyclerView) findViewById(R.id.rv_doctorlist);
         banner = (Banner) findViewById(R.id.banner);
         tv_info = (TextView) findViewById(R.id.tv_info);
         sv_doctorinfo = (NestedScrollView) findViewById(R.id.sv_doctorinfo);
@@ -97,6 +112,20 @@ public class DeptinfoActivity extends AppCompatActivity {
         tv_name.setText(department.getHname()+"-"+department.getDeptname());
         tv_title.setText(department.getHname()+"-"+department.getDeptname());
         tv_info.setText(department.getDeptinfo());
+        doctorList=dbManager.getAllDoctorForDept(department.getHname(),department.getDeptname());
+        adapter = new DoctorMoreAdapter(doctorList, this);
+        rv_doctorlist.setLayoutManager(new LinearLayoutManager(this));
+        rv_doctorlist.setAdapter(adapter);
+        adapter.setOnItemClickListener(new DoctorMoreAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(DeptinfoActivity.this, DoctorInfoActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("info", doctorList.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
     }
 
     private void changeToolBg(boolean scrolled) {

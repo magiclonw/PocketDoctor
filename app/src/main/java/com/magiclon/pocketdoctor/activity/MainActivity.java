@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private NestedScrollView sv_main;
     private Toolbar toolbar;
     private String imgs[] = {"http://m1.biz.itc.cn/pic/new/n/80/78/Img7307880_n.jpg", "http://img.taopic.com/uploads/allimg/140222/240403-14022212200685.jpg", "http://www.qhnews.com/pic/0/00/48/53/485313_972948.jpg", "http://img.tvzn.com/roleimg/370222938.jpg"};
-    private LinearLayout ll_main_fagui;
     private LinearLayout ll_main_qiaomen;
     private LinearLayout ll_main_zixun;
     private LinearLayout ll_main_guanzhu;
@@ -49,10 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-        ll_main_fagui = (LinearLayout) findViewById(R.id.ll_main_fagui);
         ll_main_zixun = (LinearLayout) findViewById(R.id.ll_main_zixun);
         ll_main_guanzhu = (LinearLayout) findViewById(R.id.ll_main_guanzhu);
-        ll_main_fagui.setOnClickListener(this);
         ll_main_zixun.setOnClickListener(this);
         ll_main_guanzhu.setOnClickListener(this);
         ll_main_qiaomen = (LinearLayout) findViewById(R.id.ll_main_qiaomen);
@@ -120,11 +117,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.ll_main_search:
                 Intent sintent = new Intent(this, SearchActivity.class);
                 startActivity(sintent);
-                break;
-            case R.id.ll_main_fagui:
-                Intent intent1 = new Intent(MainActivity.this, ZiXunActivity.class);
-
-                startActivity(intent1);
                 break;
             case R.id.ll_main_qiaomen:
                 Intent intent2 = new Intent(MainActivity.this, ZiXunActivity.class);

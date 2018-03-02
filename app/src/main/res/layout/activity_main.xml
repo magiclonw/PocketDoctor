@@ -22,30 +22,6 @@
                 android:id="@+id/banner"
                 android:layout_width="match_parent"
                 android:layout_height="300dp" />
-
-            <LinearLayout
-                android:id="@+id/ll_main_fagui"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@color/white"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/fagui"
-                    android:layout_margin="10dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="你想知道的法规都在这里"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="16sp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    />
-            </LinearLayout>
             <LinearLayout
                 android:id="@+id/ll_main_qiaomen"
                 android:layout_width="match_parent"
@@ -62,9 +38,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="生活中遇到，能救命"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="16sp"
+                    android:text="查医生"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     />
@@ -85,9 +61,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="医学资讯"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="16sp"
+                    android:text="查医院"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     />
@@ -108,9 +84,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="特别关注"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="16sp"
+                    android:text="查科室"
+                    android:textColor="@color/black"
+                    android:textSize="16dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     />
@@ -142,7 +118,7 @@
                 android:paddingTop="8dp"
                 android:text="北京"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
 
             <LinearLayout
                 android:id="@+id/ll_main_search"
@@ -168,7 +144,7 @@
                     android:layout_height="wrap_content"
                     android:text="搜索医院、科室、医生、疾病"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
             </LinearLayout>
         </RelativeLayout>
 

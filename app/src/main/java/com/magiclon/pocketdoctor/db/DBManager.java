@@ -176,6 +176,30 @@ public class DBManager {
         db.close();
         return result;
     }
+    /**
+     * 读取所有医生
+     *
+     * @return
+     */
+    public List<Doctor> getAllDoctorForDept(String hname,String dname) {
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
+        Cursor cursor = db.rawQuery("select * from " + TABLE_NAME_DOCTOR + " where hospital='"+hname+"' and department='"+dname+"'", null);
+        List<Doctor> result = new ArrayList<>();
+        Doctor doctor;
+        while (cursor.moveToNext()) {
+            String name = cursor.getString(0);
+            String level = cursor.getString(1);
+            String hospital = cursor.getString(2);
+            String department = cursor.getString(3);
+            String info = cursor.getString(4);
+            String time = cursor.getString(5);
+            doctor = new Doctor(name, level, hospital, department, info, time);
+            result.add(doctor);
+        }
+        cursor.close();
+        db.close();
+        return result;
+    }
 
     /**
      * 读取所有医院
