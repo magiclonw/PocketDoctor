@@ -3,37 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:id="@+id/ll_week"
     android:background="@drawable/touch_bg">
 
     <LinearLayout
-        android:id="@+id/item_history_info"
-        android:layout_width="match_parent"
+        android:id="@+id/ll_item_week"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:layout_margin="15dp">
 
         <TextView
-            android:id="@+id/tv_notify_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textColor="@color/super_light_grey"
-            android:textSize="16dp"
-            android:layout_weight="1"
-            android:text="11111111111"/>
-
-        <TextView
-            android:id="@+id/tv_notify_type"
+            android:id="@+id/tv_week"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
             android:textColor="@color/super_light_grey"
             android:textSize="16dp"
-            android:text="其他"
-            android:layout_marginLeft="15dp"/>
+            android:layout_weight="1"
+            android:text="星期一"/>
+
+        <ImageView
+            android:id="@+id/iv_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/unselected" />
 
     </LinearLayout>
 

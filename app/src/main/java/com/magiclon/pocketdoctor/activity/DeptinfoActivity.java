@@ -63,7 +63,7 @@ public class DeptinfoActivity extends AppCompatActivity {
                 .init();
         dbManager=new DBManager(this);
         dbManager.copyDBFile();
-        barheight = DensityUtil.Companion.dp2px(this, 200f);
+        barheight = DensityUtil.Companion.dp2px(this, 210f);
         initView();
     }
 
@@ -116,7 +116,9 @@ public class DeptinfoActivity extends AppCompatActivity {
         tv_info.setText(department.getDeptinfo());
         doctorList=dbManager.getAllDoctorForDept(department.getHname(),department.getDeptname());
         adapter = new DoctorMoreAdapter(doctorList, this);
-        rv_doctorlist.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        rv_doctorlist.setLayoutManager(linearLayoutManager);
+        rv_doctorlist.setNestedScrollingEnabled(false);
         rv_doctorlist.setAdapter(adapter);
         adapter.setOnItemClickListener(new DoctorMoreAdapter.OnRecyclerViewItemClickListener() {
             @Override
@@ -128,6 +130,7 @@ public class DeptinfoActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
     private void changeToolBg(boolean scrolled) {

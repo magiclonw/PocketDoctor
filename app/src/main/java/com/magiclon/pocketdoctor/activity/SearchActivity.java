@@ -263,7 +263,16 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             hosadapter.notifyDataSetChanged();
             dadapter.notifyDataSetChanged();
         } else if ("常见疾病".equals(type)) {
-
+            DeptDocHosListBean deptDocHosListBean = dbManager.getAllInfo(name);
+            dlist.clear();
+            hoslist.clear();
+            deptlist.clear();
+            hoslist.addAll(deptDocHosListBean.getHospitalList());
+            dlist.addAll(deptDocHosListBean.getDoctorList());
+            deptlist.addAll(deptDocHosListBean.getDepartmentList());
+            hosadapter.notifyDataSetChanged();
+            dadapter.notifyDataSetChanged();
+            deptadapter.notifyDataSetChanged();
         } else if ("".equals(type)) {
             //需要再加入keyword
             DeptDocHosListBean deptDocHosListBean = dbManager.getAllInfo(name);

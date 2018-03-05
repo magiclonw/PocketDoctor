@@ -132,7 +132,7 @@ public class DBManager {
         for (int i = 0; i <edt.length() ; i++) {
             stringBuilder.append(edt.charAt(i)+"%");
         }
-        Log.e("*****",stringBuilder.toString());
+//        Log.e("*****",stringBuilder.toString());
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
         Cursor cursor = db.rawQuery("select name,type from " + TABLE_NAME_NOTIFY + " where keyword like '" + stringBuilder.toString() + "'", null);
         List<Notify> result = new ArrayList<>();
@@ -170,6 +170,35 @@ public class DBManager {
             String info = cursor.getString(4);
             String time = cursor.getString(5);
             doctor = new Doctor(name, level, hospital, department, info, time);
+            result.add(doctor);
+        }
+        cursor.close();
+        db.close();
+        return result;
+    }
+    /**
+     * 读取所有医生根据名字和出诊时间
+     *
+     * @return
+     */
+    public List<Doctor> getAllDoctor(String dname,String sqltime) {
+        String sqlwhere = "";
+        if (!"".equals(dname)) {
+            sqlwhere = " where name='" + dname + "' and time like '"+sqltime+"'";
+        }
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
+        Cursor cursor = db.rawQuery("select * from " + TABLE_NAME_DOCTOR + sqlwhere, null);
+        List<Doctor> result = new ArrayList<>();
+        Doctor doctor;
+        while (cursor.moveToNext()) {
+            String name = cursor.getString(0);
+            String level = cursor.getString(1);
+            String hospital = cursor.getString(2);
+            String department = cursor.getString(3);
+            String info = cursor.getString(4);
+            String time = cursor.getString(5);
+            doctor = new Doctor(name, level, hospital, department, info, time);
+            Log.e("---",doctor.toString());
             result.add(doctor);
         }
         cursor.close();

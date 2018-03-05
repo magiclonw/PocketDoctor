@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -11,16 +13,20 @@ import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
+import com.magiclon.pocketdoctor.adapter.HospitalMoreAdapter;
+import com.magiclon.pocketdoctor.db.DBManager;
+import com.magiclon.pocketdoctor.model.Hospital;
 import com.magiclon.pocketdoctor.tools.DensityUtil;
 import com.magiclon.pocketdoctor.tools.GlideImageLoader;
-
 import com.magiclon.pocketdoctor.tools.SharePreferenceUtil;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 import com.youth.banner.listener.OnBannerListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -33,47 +39,80 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout ll_main_qiaomen;
     private LinearLayout ll_main_zixun;
     private LinearLayout ll_main_guanzhu;
-
+    private RecyclerView rv_main_hospital;
+    private List<Hospital> hoslist = new ArrayList<>();
+    private HospitalMoreAdapter hadapter;
+    private DBManager dbManager;
+    private boolean isscrolled = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         ImmersionBar.with(this)
                 .titleBar(findViewById(R.id.toolbar), false)
                 .transparentBar()
                 .init();
+        dbManager=new DBManager(this);
+        dbManager.copyDBFile();
         initView();
         initData();
     }
 
     private void initView() {
-        ll_main_zixun = (LinearLayout) findViewById(R.id.ll_main_zixun);
-        ll_main_guanzhu = (LinearLayout) findViewById(R.id.ll_main_guanzhu);
+        ll_main_zixun = findViewById(R.id.ll_main_zixun);
+        ll_main_guanzhu = findViewById(R.id.ll_main_guanzhu);
+        rv_main_hospital = findViewById(R.id.rv_main_hospital);
         ll_main_zixun.setOnClickListener(this);
         ll_main_guanzhu.setOnClickListener(this);
-        ll_main_qiaomen = (LinearLayout) findViewById(R.id.ll_main_qiaomen);
+        ll_main_qiaomen = findViewById(R.id.ll_main_qiaomen);
         ll_main_qiaomen.setOnClickListener(this);
-        banner = (Banner) findViewById(R.id.banner);
-        city = (TextView) findViewById(R.id.city);
-        ll_main_search = (LinearLayout) findViewById(R.id.ll_main_search);
-        sv_main = (NestedScrollView) findViewById(R.id.sv_main);
+        banner = findViewById(R.id.banner);
+        city = findViewById(R.id.city);
+        ll_main_search = findViewById(R.id.ll_main_search);
+        sv_main = findViewById(R.id.sv_main);
         city.setOnClickListener(this);
         ll_main_search.setOnClickListener(this);
         final int height_banner = DensityUtil.Companion.dp2px(this, 230);
         sv_main.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (v.getScrollY() >= height_banner) {
-                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.color.colorPrimary));
-                } else if (v.getScrollY() < height_banner) {
-                    toolbar.setBackgroundDrawable(getResources().getDrawable(R.color.transe));
+                boolean scrolled;
+                if (scrollY > height_banner) {
+                    scrolled = true;
+                } else {
+                    scrolled = false;
                 }
+                changeToolBg(scrolled);
             }
         });
+        hoslist=dbManager.getAllHospital("");
+        hadapter = new HospitalMoreAdapter(hoslist, this);
+        rv_main_hospital.setLayoutManager(new LinearLayoutManager(this));
+        rv_main_hospital.setNestedScrollingEnabled(false);
+        rv_main_hospital.setAdapter(hadapter);
+        hadapter.setOnItemClickListener(new HospitalMoreAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(MainActivity.this, HospitalinfoActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("info", hoslist.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+    }
+    private void changeToolBg(boolean scrolled) {
+        if (isscrolled != scrolled) {
+            isscrolled = scrolled;
+            if (isscrolled) {
+                toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            } else {
+                toolbar.setBackgroundColor(getResources().getColor(R.color.transe));
+            }
+        }
 
     }
-
     private void initData() {
         //设置banner样式
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
