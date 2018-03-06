@@ -28,7 +28,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
         <ImageView
             android:id="@+id/item_history_delone"
@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:text="删除全部历史纪录"
             android:textColor="@color/super_light_grey"
-            android:textSize="15sp" />
+            android:textSize="15dp" />
     </LinearLayout>
 
 </LinearLayout>

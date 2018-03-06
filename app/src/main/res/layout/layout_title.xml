@@ -12,7 +12,7 @@
         android:layout_centerInParent="true"
         android:text="标题"
         android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:textSize="16dp" />
 
     <ImageView
         android:id="@+id/iv_left"
@@ -42,7 +42,7 @@
         android:padding="15dp"
         android:text="保存"
         android:textColor="@color/white"
-        android:textSize="14sp"
+        android:textSize="14dp"
         android:visibility="invisible" />
 
     <TextView
@@ -54,7 +54,7 @@
         android:padding="15dp"
         android:text="保存"
         android:textColor="@color/white"
-        android:textSize="14sp"
+        android:textSize="14dp"
         android:visibility="invisible" />
 
 

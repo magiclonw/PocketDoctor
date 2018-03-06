@@ -10,5 +10,5 @@
         android:background="@drawable/touch_bg"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:textSize="16sp"/>
+        android:textSize="16dp"/>
 </RelativeLayout>

@@ -25,7 +25,7 @@
             android:layout_marginLeft="10dp"
             android:text="相关医生"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
     </LinearLayout>
 
     <LinearLayout

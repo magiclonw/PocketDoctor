@@ -43,6 +43,6 @@
                 android:layout_marginLeft="8dp"
                 android:layout_gravity="center_vertical"
                 android:text="@string/locating"
-                android:textSize="16sp"/>
+                android:textSize="16dp"/>
         </LinearLayout>
 </LinearLayout>

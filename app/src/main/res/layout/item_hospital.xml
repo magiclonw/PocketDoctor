@@ -58,14 +58,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:text="1111111111111111111111111"
                 android:textSize="16dp" />
             <TextView
                 android:id="@+id/tv_addr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/super_light_grey"
-                android:text="111111111111111111"
                 android:maxLines="2"
                 android:ellipsize="end"
                 android:layout_marginTop="10dp"

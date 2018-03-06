@@ -23,7 +23,7 @@
         android:background="@color/colorPrimaryDark"
         android:gravity="center"
         android:textColor="#ffffffff"
-        android:textSize="30sp"
+        android:textSize="30dp"
         android:visibility="invisible" />
 
     <com.magiclon.pocketdoctor.tools.SideBar
