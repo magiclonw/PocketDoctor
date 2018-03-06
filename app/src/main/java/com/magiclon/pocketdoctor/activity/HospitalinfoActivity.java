@@ -1,8 +1,11 @@
 package com.magiclon.pocketdoctor.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +14,10 @@ import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
+import com.magiclon.pocketdoctor.adapter.DeptMorenameAdapter;
+import com.magiclon.pocketdoctor.db.DBManager;
+import com.magiclon.pocketdoctor.model.Department;
+import com.magiclon.pocketdoctor.model.Doctor;
 import com.magiclon.pocketdoctor.model.Hospital;
 import com.magiclon.pocketdoctor.tools.DensityUtil;
 import com.magiclon.pocketdoctor.tools.GlideImageLoader;
@@ -19,7 +26,17 @@ import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class HospitalinfoActivity extends AppCompatActivity {
 
@@ -38,12 +55,19 @@ public class HospitalinfoActivity extends AppCompatActivity {
     private TextView tv_name;
     private int barheight = 0;
     private boolean isscrolled = false;
+    private RecyclerView rv_hospital_peptlist;
+    private Disposable mdisposable;
+    private List<Department> deptlist = new ArrayList<>();
+    private DeptMorenameAdapter hadapter;
+    private DBManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hospitalinfo);
         hospital = (Hospital) getIntent().getExtras().get("info");
+        dbManager = new DBManager(this);
+        dbManager.copyDBFile();
         ImmersionBar.with(this)
                 .titleBar(findViewById(R.id.toolbar), false)
                 .transparentBar()
@@ -53,17 +77,18 @@ public class HospitalinfoActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        tv_name = (TextView) findViewById(R.id.tv_name);
-        tv_title = (TextView) findViewById(R.id.tv_title);
-        banner = (Banner) findViewById(R.id.banner);
-        tv_addr = (TextView) findViewById(R.id.tv_addr);
-        tv_info = (TextView) findViewById(R.id.tv_info);
-        tv_hospital_dept = (TextView) findViewById(R.id.tv_hospital_dept);
-        tv_hospital_machine = (TextView) findViewById(R.id.tv_hospital_machine);
-        tv_hospital_guide = (TextView) findViewById(R.id.tv_hospital_guide);
-        sv_doctorinfo = (NestedScrollView) findViewById(R.id.sv_doctorinfo);
-        back = (ImageView) findViewById(R.id.back);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        tv_name = findViewById(R.id.tv_name);
+        tv_title = findViewById(R.id.tv_title);
+        banner = findViewById(R.id.banner);
+        tv_addr = findViewById(R.id.tv_addr);
+        tv_info = findViewById(R.id.tv_info);
+        rv_hospital_peptlist = findViewById(R.id.rv_hospital_peptlist);
+        tv_hospital_dept = findViewById(R.id.tv_hospital_dept);
+        tv_hospital_machine = findViewById(R.id.tv_hospital_machine);
+        tv_hospital_guide = findViewById(R.id.tv_hospital_guide);
+        sv_doctorinfo = findViewById(R.id.sv_doctorinfo);
+        back = findViewById(R.id.back);
+        toolbar = findViewById(R.id.toolbar);
         //设置banner样式
         banner.setBannerStyle(BannerConfig.NUM_INDICATOR);
         //设置图片加载器
@@ -91,11 +116,7 @@ public class HospitalinfoActivity extends AppCompatActivity {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 boolean scrolled;
-                if (scrollY > barheight) {
-                    scrolled = true;
-                } else {
-                    scrolled = false;
-                }
+                scrolled = scrollY > barheight;
                 changeToolBg(scrolled);
             }
         });
@@ -106,6 +127,36 @@ public class HospitalinfoActivity extends AppCompatActivity {
         tv_hospital_dept.setText(hospital.getDepartment());
         tv_hospital_machine.setText(hospital.getMachine());
         tv_hospital_guide.setText(hospital.getGuide());
+        hadapter = new DeptMorenameAdapter(deptlist, this);
+        rv_hospital_peptlist.setLayoutManager(new LinearLayoutManager(this));
+        rv_hospital_peptlist.setAdapter(hadapter);
+        hadapter.setOnItemClickListener(new DeptMorenameAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(HospitalinfoActivity.this, DeptinfoActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("info", deptlist.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+        mdisposable = Observable.create(new ObservableOnSubscribe<Object>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                List<Department> list = dbManager.getAllHospitalForDept(hospital.getHid());
+                e.onNext(list);
+            }
+        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        deptlist.clear();
+                        deptlist.addAll((List<Department>)o);
+                        hadapter.notifyDataSetChanged();
+                        mdisposable.dispose();
+                    }
+                });
     }
 
     private void changeToolBg(boolean scrolled) {

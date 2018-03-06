@@ -16,6 +16,7 @@ import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.adapter.DoctorMoreAdapter;
 import com.magiclon.pocketdoctor.db.DBManager;
 import com.magiclon.pocketdoctor.model.Department;
+import com.magiclon.pocketdoctor.model.DeptDocHosListBean;
 import com.magiclon.pocketdoctor.model.Doctor;
 import com.magiclon.pocketdoctor.model.Hospital;
 import com.magiclon.pocketdoctor.tools.DensityUtil;
@@ -27,6 +28,15 @@ import com.youth.banner.Transformer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 /*
 科室详情
  */
@@ -48,9 +58,10 @@ public class DeptinfoActivity extends AppCompatActivity {
     private int barheight = 0;
     private boolean isscrolled = false;
     private DBManager dbManager;
-    private List<Doctor> doctorList =new ArrayList<>();
+    private List<Doctor> doctorList = new ArrayList<>();
     private RecyclerView rv_doctorlist;
     private DoctorMoreAdapter adapter;
+    private Disposable mdisposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +72,7 @@ public class DeptinfoActivity extends AppCompatActivity {
                 .titleBar(findViewById(R.id.toolbar), false)
                 .transparentBar()
                 .init();
-        dbManager=new DBManager(this);
+        dbManager = new DBManager(this);
         dbManager.copyDBFile();
         barheight = DensityUtil.Companion.dp2px(this, 210f);
         initView();
@@ -111,12 +122,11 @@ public class DeptinfoActivity extends AppCompatActivity {
                 changeToolBg(scrolled);
             }
         });
-        tv_name.setText(department.getHname()+"-"+department.getDeptname());
-        tv_title.setText(department.getHname()+"-"+department.getDeptname());
+        tv_name.setText(department.getHname() + "-" + department.getDeptname());
+        tv_title.setText(department.getHname() + "-" + department.getDeptname());
         tv_info.setText(department.getDeptinfo());
-        doctorList=dbManager.getAllDoctorForDept(department.getHname(),department.getDeptname());
         adapter = new DoctorMoreAdapter(doctorList, this);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rv_doctorlist.setLayoutManager(linearLayoutManager);
         rv_doctorlist.setNestedScrollingEnabled(false);
         rv_doctorlist.setAdapter(adapter);
@@ -130,6 +140,23 @@ public class DeptinfoActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        mdisposable = Observable.create(new ObservableOnSubscribe<Object>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                List<Doctor> list = dbManager.getAllDoctorForDept(department.getHname(), department.getDeptname());
+                e.onNext(list);
+            }
+        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        doctorList.clear();
+                        doctorList.addAll((List<Doctor>)o);
+                        adapter.notifyDataSetChanged();
+                        mdisposable.dispose();
+                    }
+                });
 
     }
 

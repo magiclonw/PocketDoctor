@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 
 public class Doctor implements Serializable{
+    String docid;
     String name;
     String level;
     String hospital;
@@ -17,13 +18,22 @@ public class Doctor implements Serializable{
     public Doctor() {
     }
 
-    public Doctor(String name, String level, String hospital, String department, String info, String time) {
+    public Doctor(String docid, String name, String level, String hospital, String department, String info, String time) {
+        this.docid = docid;
         this.name = name;
         this.level = level;
         this.hospital = hospital;
         this.department = department;
         this.info = info;
         this.time = time;
+    }
+
+    public String getDocid() {
+        return docid;
+    }
+
+    public void setDocid(String docid) {
+        this.docid = docid;
     }
 
     public String getName() {
@@ -66,14 +76,6 @@ public class Doctor implements Serializable{
         this.info = info;
     }
 
-    public String getShanchang() {
-        return time;
-    }
-
-    public void setShanchang(String shanchang) {
-        this.time = shanchang;
-    }
-
     public String getTime() {
         return time;
     }
@@ -85,7 +87,8 @@ public class Doctor implements Serializable{
     @Override
     public String toString() {
         return "Doctor{" +
-                "name='" + name + '\'' +
+                "docid='" + docid + '\'' +
+                ", name='" + name + '\'' +
                 ", level='" + level + '\'' +
                 ", hospital='" + hospital + '\'' +
                 ", department='" + department + '\'' +

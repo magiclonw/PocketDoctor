@@ -15,6 +15,7 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.adapter.HospitalMoreAdapter;
 import com.magiclon.pocketdoctor.db.DBManager;
+import com.magiclon.pocketdoctor.model.Doctor;
 import com.magiclon.pocketdoctor.model.Hospital;
 import com.magiclon.pocketdoctor.tools.DensityUtil;
 import com.magiclon.pocketdoctor.tools.GlideImageLoader;
@@ -26,7 +27,16 @@ import com.youth.banner.listener.OnBannerListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -44,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private HospitalMoreAdapter hadapter;
     private DBManager dbManager;
     private boolean isscrolled = false;
+    private Disposable mdisposable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .titleBar(findViewById(R.id.toolbar), false)
                 .transparentBar()
                 .init();
-        dbManager=new DBManager(this);
+        dbManager = new DBManager(this);
         dbManager.copyDBFile();
         initView();
         initData();
@@ -86,7 +98,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 changeToolBg(scrolled);
             }
         });
-        hoslist=dbManager.getAllHospital("");
         hadapter = new HospitalMoreAdapter(hoslist, this);
         rv_main_hospital.setLayoutManager(new LinearLayoutManager(this));
         rv_main_hospital.setNestedScrollingEnabled(false);
@@ -101,7 +112,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
             }
         });
+        mdisposable = Observable.create(new ObservableOnSubscribe<Object>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                List<Hospital> list = dbManager.getAllHospital("");
+                e.onNext(list);
+            }
+        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        hoslist.clear();
+                        hoslist.addAll((List<Hospital>) o);
+                        hadapter.notifyDataSetChanged();
+                        mdisposable.dispose();
+                    }
+                });
     }
+
     private void changeToolBg(boolean scrolled) {
         if (isscrolled != scrolled) {
             isscrolled = scrolled;
@@ -113,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
     private void initData() {
         //设置banner样式
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);

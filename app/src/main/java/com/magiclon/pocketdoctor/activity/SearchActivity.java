@@ -40,6 +40,15 @@ import com.magiclon.pocketdoctor.model.Notify;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -63,6 +72,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private DBManager dbManager;
     private LinearLayout ll_searchmore;
     private NestedScrollView nest_search;
+    private Disposable mdisposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,33 +273,42 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             hosadapter.notifyDataSetChanged();
             dadapter.notifyDataSetChanged();
         } else if ("常见疾病".equals(type)) {
-            DeptDocHosListBean deptDocHosListBean = dbManager.getAllInfo(name);
-            dlist.clear();
-            hoslist.clear();
-            deptlist.clear();
-            hoslist.addAll(deptDocHosListBean.getHospitalList());
-            dlist.addAll(deptDocHosListBean.getDoctorList());
-            deptlist.addAll(deptDocHosListBean.getDepartmentList());
-            hosadapter.notifyDataSetChanged();
-            dadapter.notifyDataSetChanged();
-            deptadapter.notifyDataSetChanged();
+            searchAll(name);
         } else if ("".equals(type)) {
             //需要再加入keyword
-            DeptDocHosListBean deptDocHosListBean = dbManager.getAllInfo(name);
-            dlist.clear();
-            hoslist.clear();
-            deptlist.clear();
-            hoslist.addAll(deptDocHosListBean.getHospitalList());
-            dlist.addAll(deptDocHosListBean.getDoctorList());
-            deptlist.addAll(deptDocHosListBean.getDepartmentList());
-            hosadapter.notifyDataSetChanged();
-            dadapter.notifyDataSetChanged();
-            deptadapter.notifyDataSetChanged();
+            searchAll(name);
         }
         nest_search.setVisibility(View.VISIBLE);
         rv_search.setVisibility(View.GONE);
         rv_history.setVisibility(View.GONE);
         ll_searchmore.setVisibility(View.GONE);
+    }
+
+    private void searchAll(final String name) {
+        mdisposable = Observable.create(new ObservableOnSubscribe<Object>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                DeptDocHosListBean deptDocHosListBean = dbManager.getAllInfo(name);
+                Log.e("---",deptDocHosListBean.getDoctorList().toString());
+                e.onNext(deptDocHosListBean);
+            }
+        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        dlist.clear();
+                        hoslist.clear();
+                        deptlist.clear();
+                        hoslist.addAll(((DeptDocHosListBean) o).getHospitalList());
+                        dlist.addAll(((DeptDocHosListBean) o).getDoctorList());
+                        deptlist.addAll(((DeptDocHosListBean) o).getDepartmentList());
+                        hosadapter.notifyDataSetChanged();
+                        dadapter.notifyDataSetChanged();
+                        deptadapter.notifyDataSetChanged();
+                        mdisposable.dispose();
+                    }
+                });
     }
 
     @Override

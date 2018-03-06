@@ -34,7 +34,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_margin="10dp"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
             </RelativeLayout>
 
             <LinearLayout
@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:text="医院基本信息"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
 
                 <TextView
                     android:id="@+id/tv_addr"
@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/colorAccent"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
             </LinearLayout>
 
@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:text="医院简介"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
 
                 <TextView
                     android:id="@+id/tv_info"
@@ -83,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/colorAccent"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
             </LinearLayout>
             <LinearLayout
@@ -99,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:text="科室设置"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
 
                 <TextView
                     android:id="@+id/tv_hospital_dept"
@@ -107,7 +107,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/colorAccent"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
             </LinearLayout>
             <LinearLayout
@@ -123,7 +123,7 @@
                     android:layout_height="wrap_content"
                     android:text="医疗设备"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
 
                 <TextView
                     android:id="@+id/tv_hospital_machine"
@@ -131,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/colorAccent"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
             </LinearLayout>
             <LinearLayout
@@ -147,7 +147,7 @@
                     android:layout_height="wrap_content"
                     android:text="挂号、就医流程"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
 
                 <TextView
                     android:id="@+id/tv_hospital_guide"
@@ -155,8 +155,29 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/colorAccent"
-                    android:textSize="14sp" />
+                    android:textSize="14dp" />
 
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="主要科室"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="16dp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_hospital_peptlist"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

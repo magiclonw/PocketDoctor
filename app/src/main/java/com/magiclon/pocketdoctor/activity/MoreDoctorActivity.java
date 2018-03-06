@@ -24,6 +24,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 public class MoreDoctorActivity extends AppCompatActivity {
 
     private TextView tv_title;
@@ -40,7 +49,7 @@ public class MoreDoctorActivity extends AppCompatActivity {
     private LinearLayout ll_moredoctor_time;
     private View v_dim;
     private WeekAdapter adapter;
-
+    private  Disposable mdisposable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,18 +127,33 @@ public class MoreDoctorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ll_moredoctor_time.setVisibility(View.GONE);
-                Map<Integer, Boolean> selected = adapter.getSelected();
+                final Map<Integer, Boolean> selected = adapter.getSelected();
                 if (selected.size() != 0) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("%");
-                    for (Map.Entry<Integer, Boolean> entry : selected.entrySet()) {
-                        stringBuilder.append(Num2Chinese(entry.getKey())).append("%");
-                    }
-                    curdlist.clear();
-                    for (int i = 0; i <dlist.size() ; i++) {
-                        curdlist.addAll(dbManager.getAllDoctor(dlist.get(i).getName(),stringBuilder.toString()));
-                    }
-                    dadapter.notifyDataSetChanged();
+                 mdisposable= Observable.create(new ObservableOnSubscribe<Object>() {
+
+                        @Override
+                        public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append("%");
+                            for (Map.Entry<Integer, Boolean> entry : selected.entrySet()) {
+                                stringBuilder.append(Num2Chinese(entry.getKey())).append("%");
+                            }
+                             List<Doctor> list = new ArrayList<>();
+                            for (int i = 0; i <dlist.size() ; i++) {
+                                list.addAll(dbManager.getAllDoctor(dlist.get(i).getDocid(),stringBuilder.toString()));
+                            }
+                            e.onNext(list);
+                        }
+                    }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Consumer<Object>() {
+                                @Override
+                                public void accept(Object o) throws Exception {
+                                    curdlist.clear();
+                                    curdlist.addAll((List<Doctor>)o);
+                                    dadapter.notifyDataSetChanged();
+                                    mdisposable.dispose();
+                                }
+                            });
                 } else {
                     curdlist.clear();
                     curdlist.addAll(dlist);

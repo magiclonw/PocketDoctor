@@ -163,13 +163,14 @@ public class DBManager {
         List<Doctor> result = new ArrayList<>();
         Doctor doctor;
         while (cursor.moveToNext()) {
-            String name = cursor.getString(0);
-            String level = cursor.getString(1);
-            String hospital = cursor.getString(2);
-            String department = cursor.getString(3);
-            String info = cursor.getString(4);
-            String time = cursor.getString(5);
-            doctor = new Doctor(name, level, hospital, department, info, time);
+            String docid=cursor.getString(0);
+            String name = cursor.getString(1);
+            String level = cursor.getString(2);
+            String hospital = cursor.getString(3);
+            String department = cursor.getString(4);
+            String info = cursor.getString(5);
+            String time = cursor.getString(6);
+            doctor = new Doctor(docid,name, level, hospital, department, info, time);
             result.add(doctor);
         }
         cursor.close();
@@ -184,21 +185,22 @@ public class DBManager {
     public List<Doctor> getAllDoctor(String dname,String sqltime) {
         String sqlwhere = "";
         if (!"".equals(dname)) {
-            sqlwhere = " where name='" + dname + "' and time like '"+sqltime+"'";
+            sqlwhere = " where docid='" + dname + "' and time like '"+sqltime+"'";
         }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
         Cursor cursor = db.rawQuery("select * from " + TABLE_NAME_DOCTOR + sqlwhere, null);
         List<Doctor> result = new ArrayList<>();
         Doctor doctor;
         while (cursor.moveToNext()) {
-            String name = cursor.getString(0);
-            String level = cursor.getString(1);
-            String hospital = cursor.getString(2);
-            String department = cursor.getString(3);
-            String info = cursor.getString(4);
-            String time = cursor.getString(5);
-            doctor = new Doctor(name, level, hospital, department, info, time);
-            Log.e("---",doctor.toString());
+            String docid=cursor.getString(0);
+            String name = cursor.getString(1);
+            String level = cursor.getString(2);
+            String hospital = cursor.getString(3);
+            String department = cursor.getString(4);
+            String info = cursor.getString(5);
+            String time = cursor.getString(6);
+            doctor = new Doctor(docid,name, level, hospital, department, info, time);
+//            Log.e("---",doctor.toString());
             result.add(doctor);
         }
         cursor.close();
@@ -206,7 +208,7 @@ public class DBManager {
         return result;
     }
     /**
-     * 读取所有医生
+     * 读取科室下所有医生
      *
      * @return
      */
@@ -216,13 +218,14 @@ public class DBManager {
         List<Doctor> result = new ArrayList<>();
         Doctor doctor;
         while (cursor.moveToNext()) {
-            String name = cursor.getString(0);
-            String level = cursor.getString(1);
-            String hospital = cursor.getString(2);
-            String department = cursor.getString(3);
-            String info = cursor.getString(4);
-            String time = cursor.getString(5);
-            doctor = new Doctor(name, level, hospital, department, info, time);
+            String docid=cursor.getString(0);
+            String name = cursor.getString(1);
+            String level = cursor.getString(2);
+            String hospital = cursor.getString(3);
+            String department = cursor.getString(4);
+            String info = cursor.getString(5);
+            String time = cursor.getString(6);
+            doctor = new Doctor(docid,name, level, hospital, department, info, time);
             result.add(doctor);
         }
         cursor.close();
@@ -252,7 +255,6 @@ public class DBManager {
             String department = cursor.getString(4);
             String machine = cursor.getString(5);
             String guide = cursor.getString(6);
-
             hospital = new Hospital(hid, hname, info, detail, department, machine, guide);
             result.add(hospital);
         }
@@ -262,7 +264,7 @@ public class DBManager {
     }
 
     /**
-     * 读取所有科室
+     * 读取某科室信息
      *
      * @return
      */
@@ -288,6 +290,29 @@ public class DBManager {
         db.close();
         return result;
     }
+    /**
+     * 读取某医院下科室列表
+     *
+     * @return
+     */
+    public List<Department> getAllHospitalForDept(String hid) {
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
+        Cursor cursor = db.rawQuery("select * from " + TABLE_NAME_DEPARTMENT + " where hid='"+hid+"'", null);
+        List<Department> result = new ArrayList<>();
+        Department department;
+        while (cursor.moveToNext()) {
+            String deptid = cursor.getString(0);
+            String deptname = cursor.getString(1);
+//            String hid = cursor.getString(2);
+            String hname = cursor.getString(3);
+            String deptinfo = cursor.getString(4);
+            department = new Department(deptid, deptname, hid, hname, deptinfo);
+            result.add(department);
+        }
+        cursor.close();
+        db.close();
+        return result;
+    }
 
     /**
      * 读取所有医生，科室，医院
@@ -295,8 +320,13 @@ public class DBManager {
      * @return
      */
     public DeptDocHosListBean getAllInfo(String edt) {
+        StringBuilder stringBuilder=new StringBuilder();
+        stringBuilder.append("%");
+        for (int i = 0; i <edt.length() ; i++) {
+            stringBuilder.append(edt.charAt(i)+"%");
+        }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
-        Cursor cursor = db.rawQuery("select name,type from " + TABLE_NAME_NOTIFY + " where keyword like '%" + edt + "%'", null);
+        Cursor cursor = db.rawQuery("select name,type from " + TABLE_NAME_NOTIFY + " where keyword like '%" + stringBuilder.toString() + "%'", null);
         List<Doctor> doctors = new ArrayList<>();
         List<Department> departments = new ArrayList<>();
         List<Hospital> hospitals = new ArrayList<>();
