@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.activity.MoreDoctorActivity;
 import com.magiclon.pocketdoctor.activity.MoreHospitalActivity;
@@ -27,7 +29,8 @@ import java.util.List;
 public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHolder> {
     private List<Hospital> mList;
     private Context mContext;
-
+    RequestOptions myOptions = new RequestOptions().centerCrop();
+    String path="https://raw.githubusercontent.com/magiclonw/PocketDoctor/master/pic/";
     public HospitalAdapter(List<Hospital> list, Context context) {
         this.mContext = context;
         this.mList = list;
@@ -83,6 +86,8 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
                 mContext.startActivity(intent);
             }
         });
+
+        Glide.with(mContext).applyDefaultRequestOptions(myOptions).load(path+mList.get(position).getHid()+".jpg").into(holder.iv_hospital_header);
     }
 
     @Override

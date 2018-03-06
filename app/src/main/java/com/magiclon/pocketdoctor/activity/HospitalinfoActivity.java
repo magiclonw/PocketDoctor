@@ -51,7 +51,6 @@ public class HospitalinfoActivity extends AppCompatActivity {
     private ImageView back;
     private Toolbar toolbar;
     private Hospital hospital;
-    private String imgs[] = {"http://m1.biz.itc.cn/pic/new/n/80/78/Img7307880_n.jpg", "http://img.taopic.com/uploads/allimg/140222/240403-14022212200685.jpg"};
     private TextView tv_name;
     private int barheight = 0;
     private boolean isscrolled = false;
@@ -93,6 +92,7 @@ public class HospitalinfoActivity extends AppCompatActivity {
         banner.setBannerStyle(BannerConfig.NUM_INDICATOR);
         //设置图片加载器
         banner.setImageLoader(new GlideImageLoader());
+        String imgs[] = {"https://raw.githubusercontent.com/magiclonw/PocketDoctor/master/pic/"+hospital.getHid()+".jpg", "https://raw.githubusercontent.com/magiclonw/PocketDoctor/master/pic/"+hospital.getHid()+".jpg"};
         //设置图片集合
         banner.setImages(Arrays.asList(imgs));
         //设置banner动画效果

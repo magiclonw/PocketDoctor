@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.model.Hospital;
 import com.magiclon.pocketdoctor.tools.SharePreferenceUtil;
@@ -21,7 +23,8 @@ import java.util.List;
 public class HospitalMoreAdapter extends RecyclerView.Adapter<HospitalMoreAdapter.ViewHolder> {
     private List<Hospital> mList;
     private Context mContext;
-
+    RequestOptions myOptions = new RequestOptions().centerCrop();
+    String path="https://raw.githubusercontent.com/magiclonw/PocketDoctor/master/pic/";
     public HospitalMoreAdapter(List<Hospital> list, Context context) {
         this.mContext = context;
         this.mList = list;
@@ -57,6 +60,7 @@ public class HospitalMoreAdapter extends RecyclerView.Adapter<HospitalMoreAdapte
         });
         holder.tv_name.setText(mList.get(position).getHname());
         holder.tv_addr.setText(mList.get(position).getDetail());
+        Glide.with(mContext).applyDefaultRequestOptions(myOptions).load(path+mList.get(position).getHid()+".jpg").into(holder.iv_hospital_header);
     }
 
     @Override
