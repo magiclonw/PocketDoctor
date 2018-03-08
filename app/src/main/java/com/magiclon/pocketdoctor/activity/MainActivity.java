@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
+import com.magiclon.individuationtoast.ToastUtil;
 import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.adapter.HospitalMoreAdapter;
 import com.magiclon.pocketdoctor.db.DBManager;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DBManager dbManager;
     private boolean isscrolled = false;
     private Disposable mdisposable;
-
+    private long mPressedTime= 0;//双击退出
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -231,4 +232,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        long mNowTime = System.currentTimeMillis();//获取第一次按键时间
+        if ((mNowTime - mPressedTime) > 2000) {//比较两次按键时间差
+            ToastUtil.showinfo(this,"再按一次退出程序");
+            mPressedTime = mNowTime;
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
