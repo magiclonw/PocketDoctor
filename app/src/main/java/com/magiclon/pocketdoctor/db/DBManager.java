@@ -348,7 +348,7 @@ public class DBManager {
         }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
 
-        Cursor cursor_doctor = db.rawQuery("select doctor.docid,doctor.name,doctor.level,doctor.hospital,doctor.department,doctor.info,doctor.time from " + TABLE_NAME_DOCTOR + "," + TABLE_NAME_NOTIFY + " where doctor.docid=notify.notifyid AND keyword like '%" + stringBuilder.toString() + "%' LIMIT 4", null);
+        Cursor cursor_doctor = db.rawQuery("select a.docid,a.name,a.level,a.hospital,a.department,a.info,a.time from " + TABLE_NAME_DOCTOR + " as a," + TABLE_NAME_NOTIFY + " as b where a.docid=b.notifyid AND b.keyword like '%" + stringBuilder.toString() + "%' LIMIT 4", null);
         List<Doctor> doctors = new ArrayList<>();
         while (cursor_doctor.moveToNext()) {
             String docid = cursor_doctor.getString(0);
@@ -363,7 +363,7 @@ public class DBManager {
         }
         cursor_doctor.close();
         List<Department> departments = new ArrayList<>();
-        Cursor cursor_dept = db.rawQuery("select department.deptid,department.deptname,department.hid,department.hname,department.deptinfo from " + TABLE_NAME_DEPARTMENT + "," + TABLE_NAME_NOTIFY + " where department.deptid=notify.notifyid AND keyword like '%" + stringBuilder.toString() + "%' LIMIT 4", null);
+        Cursor cursor_dept = db.rawQuery("select a.deptid,a.deptname,a.hid,a.hname,a.deptinfo from " + TABLE_NAME_DEPARTMENT + " as a," + TABLE_NAME_NOTIFY + " as b where a.deptid=b.notifyid AND b.keyword like '%" + stringBuilder.toString() + "%' LIMIT 4", null);
         while (cursor_dept.moveToNext()) {
             String dptid = cursor_dept.getString(0);
             String deptname = cursor_dept.getString(1);
@@ -375,7 +375,7 @@ public class DBManager {
         }
         cursor_dept.close();
         List<Hospital> hospitals = new ArrayList<>();
-        Cursor cursor_hospital = db.rawQuery("select hospital.hid,hospital.hname,hospital.info,hospital.detail,hospital.department,hospital.machine,hospital.guide from " + TABLE_NAME_HOSPITAL + "," + TABLE_NAME_NOTIFY + " where hospital.hid=notify.notifyid and keyword like '%" + stringBuilder.toString() + "%' LIMIT 4", null);
+        Cursor cursor_hospital = db.rawQuery("select a.hid,a.hname,a.info,a.detail,a.department,a.machine,a.guide from " + TABLE_NAME_HOSPITAL + " as a," + TABLE_NAME_NOTIFY + " as b where a.hid=b.notifyid and b.keyword like '%" + stringBuilder.toString() + "%' LIMIT 4", null);
         while (cursor_hospital.moveToNext()) {
             String hhid = cursor_hospital.getString(0);
             String hname = cursor_hospital.getString(1);
@@ -410,7 +410,7 @@ public class DBManager {
         }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
 
-        Cursor cursor_doctor = db.rawQuery("select doctor.docid,doctor.name,doctor.level,doctor.hospital,doctor.department,doctor.info,doctor.time from " + TABLE_NAME_DOCTOR + "," + TABLE_NAME_NOTIFY + " where doctor.docid=notify.notifyid and notify.type='医生' and keyword like '%" + stringBuilder.toString() + "%'" + sqltime, null);
+        Cursor cursor_doctor = db.rawQuery("select a.docid,a.name,a.level,a.hospital,a.department,a.info,a.time from " + TABLE_NAME_DOCTOR + " as a," + TABLE_NAME_NOTIFY + " as b where a.docid=b.notifyid and b.type='医生' and b.keyword like '%" + stringBuilder.toString() + "%'" + sqltime, null);
         List<Doctor> doctors = new ArrayList<>();
         while (cursor_doctor.moveToNext()) {
             String docid = cursor_doctor.getString(0);
@@ -441,7 +441,7 @@ public class DBManager {
         }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
         List<Department> departments = new ArrayList<>();
-        Cursor cursor_dept = db.rawQuery("select department.deptid,department.deptname,department.hid,department.hname,department.deptinfo from " + TABLE_NAME_DEPARTMENT + "," + TABLE_NAME_NOTIFY + " where department.deptid=notify.notifyid and notify.type='科室' AND keyword like '%" + stringBuilder.toString() + "%'", null);
+        Cursor cursor_dept = db.rawQuery("select a.deptid,a.deptname,a.hid,a.hname,a.deptinfo from " + TABLE_NAME_DEPARTMENT + " as a," + TABLE_NAME_NOTIFY + " as b where a.deptid=b.notifyid and b.type='科室' AND b.keyword like '%" + stringBuilder.toString() + "%'", null);
         while (cursor_dept.moveToNext()) {
             String dptid = cursor_dept.getString(0);
             String deptname = cursor_dept.getString(1);
@@ -469,7 +469,7 @@ public class DBManager {
         }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
         List<Hospital> hospitals = new ArrayList<>();
-        Cursor cursor_hospital = db.rawQuery("select hospital.hid,hospital.hname,hospital.info,hospital.detail,hospital.department,hospital.machine,hospital.guide from " + TABLE_NAME_HOSPITAL + "," + TABLE_NAME_NOTIFY + " where hospital.hid=notify.notifyid and notify.type='医院' and keyword like '%" + stringBuilder.toString() + "%'", null);
+        Cursor cursor_hospital = db.rawQuery("select a.hid,a.hname,a.info,a.detail,a.department,a.machine,a.guide from " + TABLE_NAME_HOSPITAL + " as a," + TABLE_NAME_NOTIFY + " as b where a.hid=b.notifyid and b.type='医院' and b.keyword like '%" + stringBuilder.toString() + "%'", null);
         while (cursor_hospital.moveToNext()) {
             String hhid = cursor_hospital.getString(0);
             String hname = cursor_hospital.getString(1);
