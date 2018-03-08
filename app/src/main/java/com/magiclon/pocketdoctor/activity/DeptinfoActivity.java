@@ -53,7 +53,6 @@ public class DeptinfoActivity extends AppCompatActivity {
     private ImageView back;
     private Toolbar toolbar;
     private Department department;
-    private String imgs[] = {"http://m1.biz.itc.cn/pic/new/n/80/78/Img7307880_n.jpg", "http://img.taopic.com/uploads/allimg/140222/240403-14022212200685.jpg"};
     private TextView tv_name;
     private int barheight = 0;
     private boolean isscrolled = false;
@@ -70,27 +69,28 @@ public class DeptinfoActivity extends AppCompatActivity {
         department = (Department) getIntent().getExtras().get("info");
         ImmersionBar.with(this)
                 .titleBar(findViewById(R.id.toolbar), false)
-                .transparentBar()
+                .transparentBar().navigationBarColor(R.color.line).fullScreen(false)
                 .init();
         dbManager = new DBManager(this);
         dbManager.copyDBFile();
-        barheight = DensityUtil.Companion.dp2px(this, 210f);
+        barheight = DensityUtil.Companion.dp2px(this, 230f);
         initView();
     }
 
     private void initView() {
-        tv_name = (TextView) findViewById(R.id.tv_name);
-        tv_title = (TextView) findViewById(R.id.tv_title);
-        rv_doctorlist = (RecyclerView) findViewById(R.id.rv_doctorlist);
-        banner = (Banner) findViewById(R.id.banner);
-        tv_info = (TextView) findViewById(R.id.tv_info);
-        sv_doctorinfo = (NestedScrollView) findViewById(R.id.sv_doctorinfo);
-        back = (ImageView) findViewById(R.id.back);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        tv_name = findViewById(R.id.tv_name);
+        tv_title = findViewById(R.id.tv_title);
+        rv_doctorlist = findViewById(R.id.rv_doctorlist);
+        banner = findViewById(R.id.banner);
+        tv_info = findViewById(R.id.tv_info);
+        sv_doctorinfo = findViewById(R.id.sv_doctorinfo);
+        back = findViewById(R.id.back);
+        toolbar = findViewById(R.id.toolbar);
         //设置banner样式
         banner.setBannerStyle(BannerConfig.NUM_INDICATOR);
         //设置图片加载器
         banner.setImageLoader(new GlideImageLoader());
+        String imgs[] = {"https://raw.githubusercontent.com/magiclonw/PocketDoctor/master/pic/"+department.getHid()+".jpg", "https://raw.githubusercontent.com/magiclonw/PocketDoctor/master/pic/"+department.getHid()+".jpg"};
         //设置图片集合
         banner.setImages(Arrays.asList(imgs));
         //设置banner动画效果
@@ -114,11 +114,7 @@ public class DeptinfoActivity extends AppCompatActivity {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 boolean scrolled;
-                if (scrollY > barheight) {
-                    scrolled = true;
-                } else {
-                    scrolled = false;
-                }
+                scrolled = scrollY > barheight;
                 changeToolBg(scrolled);
             }
         });

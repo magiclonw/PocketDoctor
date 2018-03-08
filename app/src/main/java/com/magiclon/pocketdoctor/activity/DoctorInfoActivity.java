@@ -32,7 +32,7 @@ public class DoctorInfoActivity extends AppCompatActivity {
         doctor = (Doctor) getIntent().getExtras().get("info");
         ImmersionBar.with(this)
                 .titleBar(findViewById(R.id.toolbar), false)
-                .transparentBar()
+                .transparentBar().navigationBarColor(R.color.line).fullScreen(false)
                 .init();
         initView();
     }

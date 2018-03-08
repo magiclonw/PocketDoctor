@@ -20,10 +20,13 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.adapter.DeptnameAdapter;
@@ -54,6 +57,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     private TextView tv_search_cancle;
     private EditText edt_search;
+    private ImageView iv_search_clear;
     private RecyclerView rv_search;
     private RecyclerView rv_history;
     private RecyclerView rv_doctor;
@@ -87,19 +91,21 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
 
     private void initView() {
-        tv_search_cancle = (TextView) findViewById(R.id.tv_search_cancle);
-        edt_search = (EditText) findViewById(R.id.edt_search);
-        rv_search = (RecyclerView) findViewById(R.id.rv_search);
-        rv_history = (RecyclerView) findViewById(R.id.rv_history);
-        rv_doctor = (RecyclerView) findViewById(R.id.rv_doctor);
-        rv_hospital = (RecyclerView) findViewById(R.id.rv_hospital);
-        rv_deptname = (RecyclerView) findViewById(R.id.rv_deptname);
-        ll_searchmore = (LinearLayout) findViewById(R.id.ll_searchmore);
-        nest_search = (NestedScrollView) findViewById(R.id.nest_search);
+        tv_search_cancle = findViewById(R.id.tv_search_cancle);
+        edt_search = findViewById(R.id.edt_search);
+        rv_search = findViewById(R.id.rv_search);
+        rv_history = findViewById(R.id.rv_history);
+        rv_doctor = findViewById(R.id.rv_doctor);
+        rv_hospital = findViewById(R.id.rv_hospital);
+        rv_deptname = findViewById(R.id.rv_deptname);
+        ll_searchmore = findViewById(R.id.ll_searchmore);
+        nest_search = findViewById(R.id.nest_search);
+        iv_search_clear = findViewById(R.id.iv_search_clear);
     }
 
     private void addEvents() {
         tv_search_cancle.setOnClickListener(this);
+        iv_search_clear.setOnClickListener(this);
         edt_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -121,15 +127,14 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                Log.e("----", charSequence.toString() + "---" + i + "----" + i1 + "---" + i2);
-
 
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
                 if (!edt_search.getText().toString().trim().equals("")) {
-                    List<Notify> list = dbManager.getAllNotify(edt_search.getText().toString().trim().replace("-", ""));
+                    iv_search_clear.setVisibility(View.VISIBLE);
+                    List<Notify> list = dbManager.getAllNotify(edt_search.getText().toString().trim().replaceAll("[.·|-]", ""));
                     if (list.size() > 0) {
                         nlist.clear();
                     }
@@ -139,6 +144,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                     rv_history.setVisibility(View.GONE);
                     ll_searchmore.setVisibility(View.GONE);
                     nest_search.setVisibility(View.GONE);
+                } else {
+                    iv_search_clear.setVisibility(View.GONE);
                 }
             }
         });
@@ -155,7 +162,6 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             public void onItemClick(View view, int position) {
                 ((InputMethodManager) SearchActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE))
                         .hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-//                submit("", hlist.get(position));
                 edt_search.setText(hlist.get(position));
                 rv_history.setVisibility(View.GONE);
                 rv_search.setVisibility(View.VISIBLE);
@@ -163,24 +169,47 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         });
         hadapter.setOnDeleteLister(new HistoryAdapter.OnDeleteLister() {
             @Override
-            public void onDeleteOne(String name) {
-                dbManager.deleteOneHistory(name);
-                hlist.clear();
-                hlist.addAll(dbManager.getAllHistory());
-                hadapter.notifyDataSetChanged();
-                if (hlist.size() == 0) {
-                    ll_searchmore.setVisibility(View.VISIBLE);
-                } else {
-                    rv_history.setVisibility(View.VISIBLE);
-                }
+            public void onDeleteOne(final String name) {
+                new MaterialDialog.Builder(SearchActivity.this)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                                dbManager.deleteOneHistory(name);
+                                hlist.clear();
+                                hlist.addAll(dbManager.getAllHistory());
+                                hadapter.notifyDataSetChanged();
+                                if (hlist.size() == 0) {
+                                    ll_searchmore.setVisibility(View.VISIBLE);
+                                } else {
+                                    rv_history.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        })
+                        .title("提示")
+                        .content("确定要删除么")
+                        .positiveText("确定").positiveColor(getResources().getColor(R.color.colorPrimary))
+                        .negativeText("取消")
+                        .show();
+
             }
 
             @Override
             public void onDeleteAll() {
-                dbManager.deleteAllHistory();
-                hlist.clear();
-                hadapter.notifyDataSetChanged();
-                ll_searchmore.setVisibility(View.VISIBLE);
+                new MaterialDialog.Builder(SearchActivity.this)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                                dbManager.deleteAllHistory();
+                                hlist.clear();
+                                hadapter.notifyDataSetChanged();
+                                ll_searchmore.setVisibility(View.VISIBLE);
+                            }
+                        })
+                        .title("提示")
+                        .content("确定要删除全部么")
+                        .positiveText("确定").positiveColor(getResources().getColor(R.color.colorPrimary))
+                        .negativeText("取消")
+                        .show();
             }
         });
         if (hlist.size() == 0) {
@@ -198,7 +227,12 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 ((InputMethodManager) SearchActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE))
                         .hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 dbManager.insertHistory(nlist.get(position).getName());
-                submit(nlist.get(position).getType(), nlist.get(position).getName());
+                if ("常见疾病".equals(nlist.get(position).getType())) {
+                    submit(nlist.get(position).getType(), nlist.get(position).getName());
+                } else {
+                    submit(nlist.get(position).getType(), nlist.get(position).getNotifyid());
+                }
+
             }
         });
         /***********医生列表**********/
@@ -264,18 +298,16 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             hosadapter.notifyDataSetChanged();
             deptadapter.notifyDataSetChanged();
         } else if ("科室".equals(type)) {
-            String sname[] = name.split("-");
             deptlist.clear();
             dlist.clear();
             hoslist.clear();
-            deptlist.addAll(dbManager.getAllDept(sname[0], sname[1]));
+            deptlist.addAll(dbManager.getAllDept(name));
             deptadapter.notifyDataSetChanged();
             hosadapter.notifyDataSetChanged();
             dadapter.notifyDataSetChanged();
         } else if ("常见疾病".equals(type)) {
             searchAll(name);
         } else if ("".equals(type)) {
-            //需要再加入keyword
             searchAll(name);
         }
         nest_search.setVisibility(View.VISIBLE);
@@ -289,8 +321,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void subscribe(ObservableEmitter<Object> e) throws Exception {
-                DeptDocHosListBean deptDocHosListBean = dbManager.getAllInfo(name);
-                Log.e("---",deptDocHosListBean.getDoctorList().toString());
+                DeptDocHosListBean deptDocHosListBean = dbManager.getAllInfo(name.replaceAll("[·.|-]", ""));
+//                Log.e("---",deptDocHosListBean.getDoctorList().toString());
                 e.onNext(deptDocHosListBean);
             }
         }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
@@ -318,6 +350,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 ((InputMethodManager) SearchActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE))
                         .hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 finish();
+                break;
+            case R.id.iv_search_clear:
+                edt_search.setText("");
                 break;
         }
     }

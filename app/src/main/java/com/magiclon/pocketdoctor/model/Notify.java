@@ -5,15 +5,22 @@ package com.magiclon.pocketdoctor.model;
  */
 
 public class Notify {
+    String notifyid;
     String name;
     String type;
 
-    public Notify(String name, String type) {
+    public Notify(String notifyid, String name, String type) {
+        this.notifyid = notifyid;
         this.name = name;
         this.type = type;
     }
 
-    public Notify() {
+    public String getNotifyid() {
+        return notifyid;
+    }
+
+    public void setNotifyid(String notifyid) {
+        this.notifyid = notifyid;
     }
 
     public String getName() {
@@ -35,7 +42,8 @@ public class Notify {
     @Override
     public String toString() {
         return "Notify{" +
-                "name='" + name + '\'' +
+                "notifyid='" + notifyid + '\'' +
+                ", name='" + name + '\'' +
                 ", type='" + type + '\'' +
                 '}';
     }

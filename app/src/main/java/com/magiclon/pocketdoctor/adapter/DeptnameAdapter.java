@@ -65,7 +65,7 @@ public class DeptnameAdapter extends RecyclerView.Adapter<DeptnameAdapter.ViewHo
         } else {
             holder.ll_hospital_top.setVisibility(View.GONE);
         }
-        if (position == 2) {
+        if (position == 2&&mList.size()>3) {
             holder.tv_hospital_more.setVisibility(View.VISIBLE);
         } else {
             holder.tv_hospital_more.setVisibility(View.GONE);

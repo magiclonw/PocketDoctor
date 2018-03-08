@@ -69,9 +69,9 @@ public class HospitalinfoActivity extends AppCompatActivity {
         dbManager.copyDBFile();
         ImmersionBar.with(this)
                 .titleBar(findViewById(R.id.toolbar), false)
-                .transparentBar()
+                .transparentBar().navigationBarColor(R.color.line).fullScreen(false)
                 .init();
-        barheight = DensityUtil.Companion.dp2px(this, 200f);
+        barheight = DensityUtil.Companion.dp2px(this, 230f);
         initView();
     }
 

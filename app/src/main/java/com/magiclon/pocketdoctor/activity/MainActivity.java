@@ -15,7 +15,6 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.adapter.HospitalMoreAdapter;
 import com.magiclon.pocketdoctor.db.DBManager;
-import com.magiclon.pocketdoctor.model.Doctor;
 import com.magiclon.pocketdoctor.model.Hospital;
 import com.magiclon.pocketdoctor.tools.DensityUtil;
 import com.magiclon.pocketdoctor.tools.GlideImageLoader;
@@ -25,9 +24,10 @@ import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 import com.youth.banner.listener.OnBannerListener;
 
+//import net.sqlcipher.database.SQLiteDatabase;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout ll_main_search;
     private NestedScrollView sv_main;
     private Toolbar toolbar;
-    private String imgs[] = {"http://m1.biz.itc.cn/pic/new/n/80/78/Img7307880_n.jpg", "http://img.taopic.com/uploads/allimg/140222/240403-14022212200685.jpg", "http://www.qhnews.com/pic/0/00/48/53/485313_972948.jpg", "http://img.tvzn.com/roleimg/370222938.jpg"};
+    private String imgs[] = {"https://raw.githubusercontent.com/magiclonw/PocketDoctor/master/pic/app2.jpg", "http://img.taopic.com/uploads/allimg/140222/240403-14022212200685.jpg", "http://www.qhnews.com/pic/0/00/48/53/485313_972948.jpg", "http://img.tvzn.com/roleimg/370222938.jpg"};
     private LinearLayout ll_main_qiaomen;
     private LinearLayout ll_main_zixun;
     private LinearLayout ll_main_guanzhu;
@@ -63,8 +63,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         toolbar = findViewById(R.id.toolbar);
         ImmersionBar.with(this)
                 .titleBar(findViewById(R.id.toolbar), false)
-                .transparentBar()
+                .transparentBar().navigationBarColor(R.color.line).fullScreen(false)
                 .init();
+//        SQLiteDatabase.loadLibs(this);
         dbManager = new DBManager(this);
         dbManager.copyDBFile();
         initView();

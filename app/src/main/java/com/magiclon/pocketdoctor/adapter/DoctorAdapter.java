@@ -62,7 +62,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
         } else {
             holder.ll_doctor_top.setVisibility(View.GONE);
         }
-        if (position == 2) {
+        if (position == 2&&mList.size()>3) {
             holder.tv_doctor_more.setVisibility(View.VISIBLE);
         } else {
             holder.tv_doctor_more.setVisibility(View.GONE);
