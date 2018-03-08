@@ -7,21 +7,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
-import com.magiclon.pocketdoctor.adapter.DeptMorenameAdapter;
+import com.magiclon.pocketdoctor.adapter.DeptMoreAdapter;
 import com.magiclon.pocketdoctor.db.DBManager;
 import com.magiclon.pocketdoctor.model.Department;
-import com.magiclon.pocketdoctor.model.Doctor;
 import com.magiclon.pocketdoctor.model.Hospital;
 import com.magiclon.pocketdoctor.tools.DensityUtil;
 import com.magiclon.pocketdoctor.tools.GlideImageLoader;
-import com.magiclon.pocketdoctor.tools.SharePreferenceUtil;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -57,7 +54,7 @@ public class HospitalinfoActivity extends AppCompatActivity {
     private RecyclerView rv_hospital_peptlist;
     private Disposable mdisposable;
     private List<Department> deptlist = new ArrayList<>();
-    private DeptMorenameAdapter hadapter;
+    private DeptMoreAdapter hadapter;
     private DBManager dbManager;
 
     @Override
@@ -127,10 +124,10 @@ public class HospitalinfoActivity extends AppCompatActivity {
         tv_hospital_dept.setText(hospital.getDepartment());
         tv_hospital_machine.setText(hospital.getMachine());
         tv_hospital_guide.setText(hospital.getGuide());
-        hadapter = new DeptMorenameAdapter(deptlist, this);
+        hadapter = new DeptMoreAdapter(deptlist, this);
         rv_hospital_peptlist.setLayoutManager(new LinearLayoutManager(this));
         rv_hospital_peptlist.setAdapter(hadapter);
-        hadapter.setOnItemClickListener(new DeptMorenameAdapter.OnRecyclerViewItemClickListener() {
+        hadapter.setOnItemClickListener(new DeptMoreAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(HospitalinfoActivity.this, DeptinfoActivity.class);

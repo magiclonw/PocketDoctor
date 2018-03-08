@@ -10,16 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.magiclon.pocketdoctor.R;
-import com.magiclon.pocketdoctor.adapter.DeptMorenameAdapter;
-import com.magiclon.pocketdoctor.adapter.HospitalMoreAdapter;
+import com.magiclon.pocketdoctor.adapter.DeptMoreAdapter;
 import com.magiclon.pocketdoctor.db.DBManager;
 import com.magiclon.pocketdoctor.model.Department;
-import com.magiclon.pocketdoctor.model.Doctor;
-import com.magiclon.pocketdoctor.model.Hospital;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -38,7 +34,7 @@ public class MoreDeptActivity extends AppCompatActivity {
     private ImageView iv_left;
     private RecyclerView rv_morehospital;
     private List<Department> deptlist = new ArrayList<>();
-    private DeptMorenameAdapter hadapter;
+    private DeptMoreAdapter hadapter;
     private Disposable mdisposable;
     private String str_search = "";
     private DBManager dbManager;
@@ -56,10 +52,10 @@ public class MoreDeptActivity extends AppCompatActivity {
         tv_title = findViewById(R.id.tv_title);
         iv_left = findViewById(R.id.iv_left);
         rv_morehospital = findViewById(R.id.rv_morehospital);
-        hadapter = new DeptMorenameAdapter(deptlist, this);
+        hadapter = new DeptMoreAdapter(deptlist, this);
         rv_morehospital.setLayoutManager(new LinearLayoutManager(this));
         rv_morehospital.setAdapter(hadapter);
-        hadapter.setOnItemClickListener(new DeptMorenameAdapter.OnRecyclerViewItemClickListener() {
+        hadapter.setOnItemClickListener(new DeptMoreAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(MoreDeptActivity.this, DeptinfoActivity.class);

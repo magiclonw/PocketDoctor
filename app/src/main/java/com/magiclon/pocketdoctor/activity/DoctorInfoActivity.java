@@ -44,19 +44,19 @@ public class DoctorInfoActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        name = (TextView) findViewById(R.id.name);
-        level = (TextView) findViewById(R.id.tv_level);
-        tv_time = (TextView) findViewById(R.id.tv_time);
-        hospitalanddept = (TextView) findViewById(R.id.hospitalanddept);
-        tv_info = (TextView) findViewById(R.id.tv_info);
-        sv_doctorinfo = (NestedScrollView) findViewById(R.id.sv_doctorinfo);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        name = findViewById(R.id.name);
+        level = findViewById(R.id.tv_level);
+        tv_time = findViewById(R.id.tv_time);
+        hospitalanddept = findViewById(R.id.hospitalanddept);
+        tv_info = findViewById(R.id.tv_info);
+        sv_doctorinfo = findViewById(R.id.sv_doctorinfo);
+        toolbar = findViewById(R.id.toolbar);
         name.setText(doctor.getName());
         level.setText( doctor.getLevel());
         hospitalanddept.setText(doctor.getHospital()+"-"+doctor.getDepartment());
         tv_info.setText(doctor.getInfo());
         tv_time.setText(doctor.getTime());
-        back = (ImageView) findViewById(R.id.back);
+        back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

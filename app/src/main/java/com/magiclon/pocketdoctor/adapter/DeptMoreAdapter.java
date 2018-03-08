@@ -1,17 +1,14 @@
 package com.magiclon.pocketdoctor.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.magiclon.pocketdoctor.R;
-import com.magiclon.pocketdoctor.activity.MoreHospitalActivity;
 import com.magiclon.pocketdoctor.model.Department;
 
 import java.util.List;
@@ -19,11 +16,11 @@ import java.util.List;
 /**
  * Created by MagicLon on 2018/3/2.
  */
-public class DeptMorenameAdapter extends RecyclerView.Adapter<DeptMorenameAdapter.ViewHolder> {
+public class DeptMoreAdapter extends RecyclerView.Adapter<DeptMoreAdapter.ViewHolder> {
     private List<Department> mList;
     private Context mContext;
 
-    public DeptMorenameAdapter(List<Department> list, Context context) {
+    public DeptMoreAdapter(List<Department> list, Context context) {
         this.mContext = context;
         this.mList = list;
     }

@@ -3,33 +3,25 @@ package com.magiclon.pocketdoctor.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
-import com.magiclon.pocketdoctor.adapter.DeptnameAdapter;
+import com.magiclon.pocketdoctor.adapter.DeptAdapter;
 import com.magiclon.pocketdoctor.adapter.DoctorAdapter;
 import com.magiclon.pocketdoctor.adapter.HistoryAdapter;
 import com.magiclon.pocketdoctor.adapter.HospitalAdapter;
@@ -44,7 +36,6 @@ import com.magiclon.pocketdoctor.utils.OnMoreClickLister;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -68,7 +59,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private NotifyAdapter nadapter;
     private DoctorAdapter dadapter;
     private HospitalAdapter hosadapter;
-    private DeptnameAdapter deptadapter;
+    private DeptAdapter deptadapter;
     private List<String> hlist = new ArrayList<>();//历史
     private List<Notify> nlist = new ArrayList<>();//提示
     private List<Doctor> dlist = new ArrayList<>();//医生
@@ -287,10 +278,10 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
         /*************科室列表*******************/
-        deptadapter = new DeptnameAdapter(deptlist, this);
+        deptadapter = new DeptAdapter(deptlist, this);
         rv_deptname.setLayoutManager(new LinearLayoutManager(this));
         rv_deptname.setAdapter(deptadapter);
-        deptadapter.setOnItemClickListener(new DeptnameAdapter.OnRecyclerViewItemClickListener() {
+        deptadapter.setOnItemClickListener(new DeptAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(SearchActivity.this, DeptinfoActivity.class);

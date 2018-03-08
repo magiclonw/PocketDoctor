@@ -43,12 +43,8 @@ import io.reactivex.schedulers.Schedulers;
 public class DeptinfoActivity extends AppCompatActivity {
 
     private Banner banner;
-    private TextView tv_addr;
     private TextView tv_title;
     private TextView tv_info;
-    private TextView tv_hospital_dept;
-    private TextView tv_hospital_machine;
-    private TextView tv_hospital_guide;
     private NestedScrollView sv_doctorinfo;
     private ImageView back;
     private Toolbar toolbar;
