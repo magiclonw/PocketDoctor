@@ -157,7 +157,7 @@ public class DBManager {
      * @return
      */
     public List<String> getAllHistory() {
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME,null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
         Cursor cursor = db.rawQuery("select * from " + TABLE_NAME_HISTORY, null);
         List<String> result = new ArrayList<>();
         while (cursor.moveToNext()) {
@@ -197,14 +197,14 @@ public class DBManager {
     }
 
     /**
-     * 读取所有医生
+     * 读取某医生信息
      *
      * @return
      */
-    public List<Doctor> getAllDoctor(String dname) {
+    public List<Doctor> getAllDoctor(String id) {
         String sqlwhere = "";
-        if (!"".equals(dname)) {
-            sqlwhere = " where docid='" + dname + "'";
+        if (!"".equals(id)) {
+            sqlwhere = " where docid='" + id + "'";
         }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
         Cursor cursor = db.rawQuery("select * from " + TABLE_NAME_DOCTOR + sqlwhere, null);
@@ -219,37 +219,6 @@ public class DBManager {
             String info = cursor.getString(5);
             String time = cursor.getString(6);
             doctor = new Doctor(docid, name, level, hospital, department, info, time);
-            result.add(doctor);
-        }
-        cursor.close();
-        db.close();
-        return result;
-    }
-
-    /**
-     * 读取所有医生根据名字和出诊时间
-     *
-     * @return
-     */
-    public List<Doctor> getAllDoctor(String docid, String sqltime) {
-        String sqlwhere = "";
-        if (!"".equals(docid)) {
-            sqlwhere = " where docid='" + docid + "' and time like '" + sqltime + "'";
-        }
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
-        Cursor cursor = db.rawQuery("select * from " + TABLE_NAME_DOCTOR + sqlwhere, null);
-        List<Doctor> result = new ArrayList<>();
-        Doctor doctor;
-        while (cursor.moveToNext()) {
-            String did = cursor.getString(0);
-            String name = cursor.getString(1);
-            String level = cursor.getString(2);
-            String hospital = cursor.getString(3);
-            String department = cursor.getString(4);
-            String info = cursor.getString(5);
-            String time = cursor.getString(6);
-            doctor = new Doctor(did, name, level, hospital, department, info, time);
-//            Log.e("---",doctor.toString());
             result.add(doctor);
         }
         cursor.close();
@@ -285,7 +254,7 @@ public class DBManager {
     }
 
     /**
-     * 读取所有医院
+     * 读取某医院信息
      *
      * @return
      */
@@ -367,7 +336,7 @@ public class DBManager {
     }
 
     /**
-     * 读取所有医生，科室，医院
+     * 读取相关所有医生，科室，医院
      *
      * @return
      */
@@ -378,26 +347,143 @@ public class DBManager {
             stringBuilder.append(edt.charAt(i) + "%");
         }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
-        Cursor cursor = db.rawQuery("select notifyid,name,type from " + TABLE_NAME_NOTIFY + " where keyword like '%" + stringBuilder.toString() + "%'", null);
+
+        Cursor cursor_doctor = db.rawQuery("select doctor.docid,doctor.name,doctor.level,doctor.hospital,doctor.department,doctor.info,doctor.time from " + TABLE_NAME_DOCTOR + "," + TABLE_NAME_NOTIFY + " where doctor.docid=notify.notifyid AND keyword like '%" + stringBuilder.toString() + "%' LIMIT 4", null);
         List<Doctor> doctors = new ArrayList<>();
-        List<Department> departments = new ArrayList<>();
-        List<Hospital> hospitals = new ArrayList<>();
-        DeptDocHosListBean deptdochoslistbean;
-        while (cursor.moveToNext()) {
-            String notifyid = cursor.getString(0);
-            String type = cursor.getString(2);
-            if (type.equals("医生")) {
-                doctors.addAll(getAllDoctor(notifyid));
-            } else if (type.equals("医院")) {
-                hospitals.addAll(getAllHospital(notifyid));
-            } else if (type.equals("科室")) {
-                departments.addAll(getAllDept(notifyid));
-            }
+        while (cursor_doctor.moveToNext()) {
+            String docid = cursor_doctor.getString(0);
+            String name = cursor_doctor.getString(1);
+            String level = cursor_doctor.getString(2);
+            String hospital = cursor_doctor.getString(3);
+            String department = cursor_doctor.getString(4);
+            String info = cursor_doctor.getString(5);
+            String time = cursor_doctor.getString(6);
+            Doctor doctor = new Doctor(docid, name, level, hospital, department, info, time);
+            doctors.add(doctor);
         }
-        deptdochoslistbean = new DeptDocHosListBean(doctors, departments, hospitals);
-        cursor.close();
+        cursor_doctor.close();
+        List<Department> departments = new ArrayList<>();
+        Cursor cursor_dept = db.rawQuery("select department.deptid,department.deptname,department.hid,department.hname,department.deptinfo from " + TABLE_NAME_DEPARTMENT + "," + TABLE_NAME_NOTIFY + " where department.deptid=notify.notifyid AND keyword like '%" + stringBuilder.toString() + "%' LIMIT 4", null);
+        while (cursor_dept.moveToNext()) {
+            String dptid = cursor_dept.getString(0);
+            String deptname = cursor_dept.getString(1);
+            String hid = cursor_dept.getString(2);
+            String hname = cursor_dept.getString(3);
+            String deptinfo = cursor_dept.getString(4);
+            Department department = new Department(dptid, deptname, hid, hname, deptinfo);
+            departments.add(department);
+        }
+        cursor_dept.close();
+        List<Hospital> hospitals = new ArrayList<>();
+        Cursor cursor_hospital = db.rawQuery("select hospital.hid,hospital.hname,hospital.info,hospital.detail,hospital.department,hospital.machine,hospital.guide from " + TABLE_NAME_HOSPITAL + "," + TABLE_NAME_NOTIFY + " where hospital.hid=notify.notifyid and keyword like '%" + stringBuilder.toString() + "%' LIMIT 4", null);
+        while (cursor_hospital.moveToNext()) {
+            String hhid = cursor_hospital.getString(0);
+            String hname = cursor_hospital.getString(1);
+            String info = cursor_hospital.getString(2);
+            String detail = cursor_hospital.getString(3);
+            String department = cursor_hospital.getString(4);
+            String machine = cursor_hospital.getString(5);
+            String guide = cursor_hospital.getString(6);
+            Hospital hospital = new Hospital(hhid, hname, info, detail, department, machine, guide);
+            hospitals.add(hospital);
+        }
+        cursor_hospital.close();
+        DeptDocHosListBean deptdochoslistbean = new DeptDocHosListBean(doctors, departments, hospitals);
         db.close();
         return deptdochoslistbean;
+    }
+
+    /**
+     * 读取查询相关的医生
+     *
+     * @return
+     */
+    public List<Doctor> getSearchDoctor(String edt, String timelike) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("%");
+        for (int i = 0; i < edt.length(); i++) {
+            stringBuilder.append(edt.charAt(i) + "%");
+        }
+        String sqltime = "";
+        if (!"".equals(timelike)) {
+            sqltime = " and time like '" + timelike + "'";
+        }
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
+
+        Cursor cursor_doctor = db.rawQuery("select doctor.docid,doctor.name,doctor.level,doctor.hospital,doctor.department,doctor.info,doctor.time from " + TABLE_NAME_DOCTOR + "," + TABLE_NAME_NOTIFY + " where doctor.docid=notify.notifyid and notify.type='医生' and keyword like '%" + stringBuilder.toString() + "%'" + sqltime, null);
+        List<Doctor> doctors = new ArrayList<>();
+        while (cursor_doctor.moveToNext()) {
+            String docid = cursor_doctor.getString(0);
+            String name = cursor_doctor.getString(1);
+            String level = cursor_doctor.getString(2);
+            String hospital = cursor_doctor.getString(3);
+            String department = cursor_doctor.getString(4);
+            String info = cursor_doctor.getString(5);
+            String time = cursor_doctor.getString(6);
+            Doctor doctor = new Doctor(docid, name, level, hospital, department, info, time);
+            doctors.add(doctor);
+        }
+        cursor_doctor.close();
+        db.close();
+        return doctors;
+    }
+
+    /**
+     * 读取相关科室
+     *
+     * @return
+     */
+    public List<Department> getSearchDept(String edt) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("%");
+        for (int i = 0; i < edt.length(); i++) {
+            stringBuilder.append(edt.charAt(i) + "%");
+        }
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
+        List<Department> departments = new ArrayList<>();
+        Cursor cursor_dept = db.rawQuery("select department.deptid,department.deptname,department.hid,department.hname,department.deptinfo from " + TABLE_NAME_DEPARTMENT + "," + TABLE_NAME_NOTIFY + " where department.deptid=notify.notifyid and notify.type='科室' AND keyword like '%" + stringBuilder.toString() + "%'", null);
+        while (cursor_dept.moveToNext()) {
+            String dptid = cursor_dept.getString(0);
+            String deptname = cursor_dept.getString(1);
+            String hid = cursor_dept.getString(2);
+            String hname = cursor_dept.getString(3);
+            String deptinfo = cursor_dept.getString(4);
+            Department department = new Department(dptid, deptname, hid, hname, deptinfo);
+            departments.add(department);
+        }
+        cursor_dept.close();
+        db.close();
+        return departments;
+    }
+
+    /**
+     * 读取相关医院
+     *
+     * @return
+     */
+    public List<Hospital> getSearchHospital(String edt) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("%");
+        for (int i = 0; i < edt.length(); i++) {
+            stringBuilder.append(edt.charAt(i) + "%");
+        }
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
+        List<Hospital> hospitals = new ArrayList<>();
+        Cursor cursor_hospital = db.rawQuery("select hospital.hid,hospital.hname,hospital.info,hospital.detail,hospital.department,hospital.machine,hospital.guide from " + TABLE_NAME_HOSPITAL + "," + TABLE_NAME_NOTIFY + " where hospital.hid=notify.notifyid and notify.type='医院' and keyword like '%" + stringBuilder.toString() + "%'", null);
+        while (cursor_hospital.moveToNext()) {
+            String hhid = cursor_hospital.getString(0);
+            String hname = cursor_hospital.getString(1);
+            String info = cursor_hospital.getString(2);
+            String detail = cursor_hospital.getString(3);
+            String department = cursor_hospital.getString(4);
+            String machine = cursor_hospital.getString(5);
+            String guide = cursor_hospital.getString(6);
+            Hospital hospital = new Hospital(hhid, hname, info, detail, department, machine, guide);
+            hospitals.add(hospital);
+        }
+        cursor_hospital.close();
+        db.close();
+        return hospitals;
     }
 
     public void insertHistory(String name) {
@@ -407,13 +493,13 @@ public class DBManager {
     }
 
     public void deleteOneHistory(String name) {
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME,null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
         db.delete(TABLE_NAME_HISTORY, "name=?", new String[]{name});
         db.close();
     }
 
     public void deleteAllHistory() {
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME,null);
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
         db.delete(TABLE_NAME_HISTORY, null, null);
         db.close();
     }

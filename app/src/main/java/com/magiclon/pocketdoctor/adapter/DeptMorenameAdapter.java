@@ -58,13 +58,6 @@ public class DeptMorenameAdapter extends RecyclerView.Adapter<DeptMorenameAdapte
         });
         holder.tv_name.setText(mList.get(position).getDeptname());
         holder.tv_addr.setText(mList.get(position).getHname());
-        holder.tv_hospital_more.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mContext, MoreHospitalActivity.class);
-                mContext.startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -75,19 +68,13 @@ public class DeptMorenameAdapter extends RecyclerView.Adapter<DeptMorenameAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tv_name;
         private TextView tv_addr;
-        private TextView tv_hospital_more;
-        private LinearLayout ll_hospital_top;
         private LinearLayout ll_hospital_info;
-        private ImageView iv_hospital_header;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tv_name = (TextView) itemView.findViewById(R.id.tv_name);
-            tv_addr = (TextView) itemView.findViewById(R.id.tv_addr);
-            tv_hospital_more = (TextView) itemView.findViewById(R.id.tv_hospital_more);
-            ll_hospital_top = (LinearLayout) itemView.findViewById(R.id.ll_hospital_top);
-            ll_hospital_info = (LinearLayout) itemView.findViewById(R.id.ll_hospital_info);
-            iv_hospital_header = (ImageView) itemView.findViewById(R.id.iv_hospital_header);
+            tv_name = itemView.findViewById(R.id.tv_name);
+            tv_addr = itemView.findViewById(R.id.tv_addr);
+            ll_hospital_info = itemView.findViewById(R.id.ll_hospital_info);
         }
     }
 }

@@ -49,12 +49,14 @@ public class MoreDoctorActivity extends AppCompatActivity {
     private LinearLayout ll_moredoctor_time;
     private View v_dim;
     private WeekAdapter adapter;
-    private  Disposable mdisposable;
+    private Disposable mdisposable;
+    private String str_search = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moredoctor);
-        dlist = (List<Doctor>) getIntent().getExtras().get("info");
+        str_search = (String) getIntent().getExtras().get("info");
         dbManager = new DBManager(this);
         dbManager.copyDBFile();
         initView();
@@ -73,7 +75,6 @@ public class MoreDoctorActivity extends AppCompatActivity {
         iv_right.setImageResource(R.mipmap.time);
         rv_moredoctor = findViewById(R.id.rv_moredoctor);
         rv_week = findViewById(R.id.rv_week);
-//        dlist.addAll(dbManager.getAllDoctor(""));
         curdlist.addAll(dlist);
         dadapter = new DoctorMoreAdapter(curdlist, this);
         rv_moredoctor.setLayoutManager(new LinearLayoutManager(this));
@@ -83,7 +84,7 @@ public class MoreDoctorActivity extends AppCompatActivity {
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(MoreDoctorActivity.this, DoctorInfoActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("info", curdlist.get(position));
+                bundle.putParcelable("info", curdlist.get(position));
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -127,40 +128,41 @@ public class MoreDoctorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ll_moredoctor_time.setVisibility(View.GONE);
-                final Map<Integer, Boolean> selected = adapter.getSelected();
-                if (selected.size() != 0) {
-                 mdisposable= Observable.create(new ObservableOnSubscribe<Object>() {
-
-                        @Override
-                        public void subscribe(ObservableEmitter<Object> e) throws Exception {
-                            StringBuilder stringBuilder = new StringBuilder();
-                            stringBuilder.append("%");
-                            for (Map.Entry<Integer, Boolean> entry : selected.entrySet()) {
-                                stringBuilder.append(Num2Chinese(entry.getKey())).append("%");
-                            }
-                             List<Doctor> list = new ArrayList<>();
-                            for (int i = 0; i <dlist.size() ; i++) {
-                                list.addAll(dbManager.getAllDoctor(dlist.get(i).getDocid(),stringBuilder.toString()));
-                            }
-                            e.onNext(list);
-                        }
-                    }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Consumer<Object>() {
-                                @Override
-                                public void accept(Object o) throws Exception {
-                                    curdlist.clear();
-                                    curdlist.addAll((List<Doctor>)o);
-                                    dadapter.notifyDataSetChanged();
-                                    mdisposable.dispose();
-                                }
-                            });
-                } else {
-                    curdlist.clear();
-                    curdlist.addAll(dlist);
-                    dadapter.notifyDataSetChanged();
-                }
+                searchDoctor();
             }
         });
+        searchDoctor();
+    }
+
+    private void searchDoctor() {
+        mdisposable = Observable.create(new ObservableOnSubscribe<Object>() {
+
+            @Override
+            public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                Map<Integer, Boolean> selected = adapter.getSelected();
+                List<Doctor> list = new ArrayList<>();
+                if (selected.size() != 0) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("%");
+                    for (Map.Entry<Integer, Boolean> entry : selected.entrySet()) {
+                        stringBuilder.append(Num2Chinese(entry.getKey())).append("%");
+                    }
+                    list.addAll(dbManager.getSearchDoctor(str_search, stringBuilder.toString()));
+                } else {
+                    list.addAll(dbManager.getSearchDoctor(str_search, ""));
+                }
+                e.onNext(list);
+            }
+        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        curdlist.clear();
+                        curdlist.addAll((List<Doctor>) o);
+                        dadapter.notifyDataSetChanged();
+                        mdisposable.dispose();
+                    }
+                });
     }
 
     private String Num2Chinese(int num) {

@@ -1,12 +1,13 @@
 package com.magiclon.pocketdoctor.model;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by Admin on 2017/8/23 023.
  */
 
-public class Doctor implements Serializable{
+public class Doctor implements Parcelable{
     String docid;
     String name;
     String level;
@@ -96,4 +97,42 @@ public class Doctor implements Serializable{
                 ", time='" + time + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.docid);
+        dest.writeString(this.name);
+        dest.writeString(this.level);
+        dest.writeString(this.hospital);
+        dest.writeString(this.department);
+        dest.writeString(this.info);
+        dest.writeString(this.time);
+    }
+
+    protected Doctor(Parcel in) {
+        this.docid = in.readString();
+        this.name = in.readString();
+        this.level = in.readString();
+        this.hospital = in.readString();
+        this.department = in.readString();
+        this.info = in.readString();
+        this.time = in.readString();
+    }
+
+    public static final Creator<Doctor> CREATOR = new Creator<Doctor>() {
+        @Override
+        public Doctor createFromParcel(Parcel source) {
+            return new Doctor(source);
+        }
+
+        @Override
+        public Doctor[] newArray(int size) {
+            return new Doctor[size];
+        }
+    };
 }

@@ -54,7 +54,7 @@ public class DoctorMoreAdapter extends RecyclerView.Adapter<DoctorMoreAdapter.Vi
             }
         });
         holder.tv_dept.setText(mList.get(position).getDepartment());
-        holder.tv_hos.setText( mList.get(position).getHospital());
+        holder.tv_hos.setText(mList.get(position).getHospital());
         holder.tv_top.setText(mList.get(position).getName() + "  " + mList.get(position).getLevel());
     }
 
@@ -67,20 +67,14 @@ public class DoctorMoreAdapter extends RecyclerView.Adapter<DoctorMoreAdapter.Vi
         private TextView tv_top;
         private TextView tv_hos;
         private TextView tv_dept;
-        private TextView tv_doctor_more;
-        private LinearLayout ll_doctor_top;
         private LinearLayout item_doctor_info;
-        private ImageView iv_doctor_header;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tv_top = (TextView) itemView.findViewById(R.id.tv_top);
-            tv_hos = (TextView) itemView.findViewById(R.id.tv_hos);
-            tv_dept = (TextView) itemView.findViewById(R.id.tv_dept);
-            tv_doctor_more = (TextView) itemView.findViewById(R.id.tv_doctor_more);
-            ll_doctor_top = (LinearLayout) itemView.findViewById(R.id.ll_doctor_top);
-            item_doctor_info = (LinearLayout) itemView.findViewById(R.id.item_doctor_info);
-            iv_doctor_header = (ImageView) itemView.findViewById(R.id.iv_doctor_header);
+            tv_top = itemView.findViewById(R.id.tv_top);
+            tv_hos = itemView.findViewById(R.id.tv_hos);
+            tv_dept = itemView.findViewById(R.id.tv_dept);
+            item_doctor_info = itemView.findViewById(R.id.item_doctor_info);
         }
     }
 }

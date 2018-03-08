@@ -40,6 +40,7 @@ import com.magiclon.pocketdoctor.model.DeptDocHosListBean;
 import com.magiclon.pocketdoctor.model.Doctor;
 import com.magiclon.pocketdoctor.model.Hospital;
 import com.magiclon.pocketdoctor.model.Notify;
+import com.magiclon.pocketdoctor.utils.OnMoreClickLister;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +78,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private LinearLayout ll_searchmore;
     private NestedScrollView nest_search;
     private Disposable mdisposable;
+    private String str_cursearch="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,7 +246,18 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(SearchActivity.this, DoctorInfoActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("info", dlist.get(position));
+                bundle.putParcelable("info", dlist.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+        dadapter.setOnMoreClickLister(new OnMoreClickLister() {
+            @Override
+            public void onMoreClick(int position) {
+                Intent intent = new Intent(SearchActivity.this, MoreDoctorActivity.class);
+                Bundle bundle = new Bundle();
+//                bundle.putSerializable("info", (Serializable) mList);
+                bundle.putString("info",str_cursearch);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -258,7 +271,17 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(SearchActivity.this, HospitalinfoActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("info", hoslist.get(position));
+                bundle.putParcelable("info", hoslist.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+        hosadapter.setOnMoreClickLister(new OnMoreClickLister() {
+            @Override
+            public void onMoreClick(int position) {
+                Intent intent = new Intent(SearchActivity.this, MoreHospitalActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putString("info", str_cursearch);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -272,7 +295,17 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(SearchActivity.this, DeptinfoActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("info", deptlist.get(position));
+                bundle.putParcelable("info", deptlist.get(position));
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+        deptadapter.setOnMoreClickLister(new OnMoreClickLister() {
+            @Override
+            public void onMoreClick(int position) {
+                Intent intent = new Intent(SearchActivity.this, MoreDeptActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putString("info", str_cursearch);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -317,12 +350,12 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void searchAll(final String name) {
+        str_cursearch=name;
         mdisposable = Observable.create(new ObservableOnSubscribe<Object>() {
 
             @Override
             public void subscribe(ObservableEmitter<Object> e) throws Exception {
                 DeptDocHosListBean deptDocHosListBean = dbManager.getAllInfo(name.replaceAll("[·.|-]", ""));
-//                Log.e("---",deptDocHosListBean.getDoctorList().toString());
                 e.onNext(deptDocHosListBean);
             }
         }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())

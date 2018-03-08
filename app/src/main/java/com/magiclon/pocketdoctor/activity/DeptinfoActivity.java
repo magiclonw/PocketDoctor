@@ -131,7 +131,7 @@ public class DeptinfoActivity extends AppCompatActivity {
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(DeptinfoActivity.this, DoctorInfoActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("info", doctorList.get(position));
+                bundle.putParcelable("info", doctorList.get(position));
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

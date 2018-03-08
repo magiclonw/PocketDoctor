@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(MainActivity.this, HospitalinfoActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("info", hoslist.get(position));
+                bundle.putParcelable("info", hoslist.get(position));
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

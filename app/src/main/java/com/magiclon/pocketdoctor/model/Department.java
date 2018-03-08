@@ -1,6 +1,7 @@
 package com.magiclon.pocketdoctor.model;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * 作者：MagicLon
@@ -9,7 +10,7 @@ import java.io.Serializable;
  * 描述：科室
  */
 
-public class Department implements Serializable {
+public class Department implements Parcelable {
     String deptid;
     String deptname;
     String hid;
@@ -74,4 +75,38 @@ public class Department implements Serializable {
                 ", deptinfo='" + deptinfo + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.deptid);
+        dest.writeString(this.deptname);
+        dest.writeString(this.hid);
+        dest.writeString(this.hname);
+        dest.writeString(this.deptinfo);
+    }
+
+    protected Department(Parcel in) {
+        this.deptid = in.readString();
+        this.deptname = in.readString();
+        this.hid = in.readString();
+        this.hname = in.readString();
+        this.deptinfo = in.readString();
+    }
+
+    public static final Creator<Department> CREATOR = new Creator<Department>() {
+        @Override
+        public Department createFromParcel(Parcel source) {
+            return new Department(source);
+        }
+
+        @Override
+        public Department[] newArray(int size) {
+            return new Department[size];
+        }
+    };
 }

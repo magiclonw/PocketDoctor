@@ -15,6 +15,7 @@ import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.activity.MoreDoctorActivity;
 import com.magiclon.pocketdoctor.model.Doctor;
 import com.magiclon.pocketdoctor.tools.SharePreferenceUtil;
+import com.magiclon.pocketdoctor.utils.OnMoreClickLister;
 
 import java.io.Serializable;
 import java.util.List;
@@ -32,6 +33,11 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
     }
 
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
+    private OnMoreClickLister onMoreClickLister = null;
+
+    public void setOnMoreClickLister(OnMoreClickLister onMoreClickLister) {
+        this.onMoreClickLister = onMoreClickLister;
+    }
 
     public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
         this.mOnItemClickListener = listener;
@@ -62,22 +68,18 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.ViewHolder
         } else {
             holder.ll_doctor_top.setVisibility(View.GONE);
         }
-        if (position == 2&&mList.size()>3) {
+        if (position == 2 && mList.size() > 3) {
             holder.tv_doctor_more.setVisibility(View.VISIBLE);
         } else {
             holder.tv_doctor_more.setVisibility(View.GONE);
         }
         holder.tv_dept.setText(mList.get(position).getDepartment());
-        holder.tv_hos.setText( mList.get(position).getHospital());
+        holder.tv_hos.setText(mList.get(position).getHospital());
         holder.tv_top.setText(mList.get(position).getName() + "  " + mList.get(position).getLevel());
         holder.tv_doctor_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, MoreDoctorActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putSerializable("info", (Serializable) mList);
-                intent.putExtras(bundle);
-                mContext.startActivity(intent);
+                onMoreClickLister.onMoreClick(position);
             }
         });
     }

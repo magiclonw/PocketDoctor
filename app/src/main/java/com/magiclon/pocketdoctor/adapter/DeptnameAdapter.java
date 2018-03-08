@@ -16,6 +16,7 @@ import com.magiclon.pocketdoctor.activity.MoreDeptActivity;
 import com.magiclon.pocketdoctor.activity.MoreHospitalActivity;
 import com.magiclon.pocketdoctor.model.Department;
 import com.magiclon.pocketdoctor.model.Hospital;
+import com.magiclon.pocketdoctor.utils.OnMoreClickLister;
 
 import java.io.Serializable;
 import java.util.List;
@@ -44,7 +45,11 @@ public class DeptnameAdapter extends RecyclerView.Adapter<DeptnameAdapter.ViewHo
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, int position);
     }
+    private OnMoreClickLister onMoreClickLister = null;
 
+    public void setOnMoreClickLister(OnMoreClickLister onMoreClickLister) {
+        this.onMoreClickLister = onMoreClickLister;
+    }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_deptment, parent, false);
@@ -75,11 +80,7 @@ public class DeptnameAdapter extends RecyclerView.Adapter<DeptnameAdapter.ViewHo
         holder.tv_hospital_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, MoreDeptActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putSerializable("info", (Serializable) mList);
-                intent.putExtras(bundle);
-                mContext.startActivity(intent);
+                onMoreClickLister.onMoreClick(position);
             }
         });
     }
