@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.adapter.DeptMoreAdapter;
 import com.magiclon.pocketdoctor.db.DBManager;
@@ -42,6 +43,9 @@ public class MoreDeptActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more_hospital);
+        ImmersionBar.with(this).statusBarColor(R.color.colorPrimary)
+                .navigationBarColor(R.color.line).fullScreen(false)
+                .init();
         dbManager = new DBManager(this);
         dbManager.copyDBFile();
         str_search = (String) getIntent().getExtras().get("info");
@@ -96,5 +100,10 @@ public class MoreDeptActivity extends AppCompatActivity {
                         mdisposable.dispose();
                     }
                 });
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();  //不调用该方法，如果界面bar发生改变，在不关闭app的情况下，退出此界面再进入将记忆最后一次bar改变的状态
     }
 }

@@ -30,7 +30,7 @@ import java.util.List;
 public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHolder> {
     private List<Hospital> mList;
     private Context mContext;
-    RequestOptions myOptions = new RequestOptions().centerCrop();
+    RequestOptions myOptions = new RequestOptions().centerCrop().placeholder(R.mipmap.fhospital).error(R.mipmap.fhospital);
     String path="https://raw.githubusercontent.com/magiclonw/PocketDoctor/master/pic/";
     public HospitalAdapter(List<Hospital> list, Context context) {
         this.mContext = context;
@@ -88,7 +88,7 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.ViewHo
             }
         });
 
-        Glide.with(mContext).applyDefaultRequestOptions(myOptions).load(path+mList.get(position).getHid()+".jpg").into(holder.iv_hospital_header);
+        Glide.with(mContext).load(path+mList.get(position).getHid()+".jpg").apply(myOptions).into(holder.iv_hospital_header);
     }
 
     @Override

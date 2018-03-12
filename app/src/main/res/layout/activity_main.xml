@@ -40,7 +40,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="你想知道的法规都在这里"
+                    android:text="内蒙古自治区医保相关政策"
                     android:textColor="@color/black"
                     android:textSize="16dp"
                     android:layout_gravity="center_vertical"

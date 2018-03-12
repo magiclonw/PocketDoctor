@@ -1,12 +1,8 @@
 package com.magiclon.pocketdoctor.activity;
 
 import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -15,31 +11,17 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
-import com.magiclon.pocketdoctor.utils.SonicJavaScriptInterface;
 import com.magiclon.pocketdoctor.utils.SonicRuntimeImpl;
 import com.magiclon.pocketdoctor.utils.SonicSessionClientImpl;
-import com.tencent.sonic.sdk.SonicCacheInterceptor;
 import com.tencent.sonic.sdk.SonicConfig;
-import com.tencent.sonic.sdk.SonicConstants;
 import com.tencent.sonic.sdk.SonicEngine;
 import com.tencent.sonic.sdk.SonicSession;
 import com.tencent.sonic.sdk.SonicSessionConfig;
-import com.tencent.sonic.sdk.SonicSessionConnection;
-import com.tencent.sonic.sdk.SonicSessionConnectionInterceptor;
-
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 资讯页面
@@ -87,6 +69,9 @@ public class ZiXunActivity extends AppCompatActivity implements OnClickListener 
         // in the real world, the init flow may cost a long time as startup
         // runtime、init configs....
         setContentView(R.layout.activity_zixun);
+        ImmersionBar.with(this).statusBarColor(R.color.colorPrimary)
+                .navigationBarColor(R.color.line).fullScreen(false)
+                .init();
         initView();
         initData();
         addListers();
@@ -198,6 +183,7 @@ public class ZiXunActivity extends AppCompatActivity implements OnClickListener 
             sonicSession.destroy();
             sonicSession = null;
         }
+        ImmersionBar.with(this).destroy();
         super.onDestroy();
     }
 }

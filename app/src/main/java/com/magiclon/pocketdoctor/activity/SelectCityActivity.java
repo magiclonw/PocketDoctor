@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.adapter.CityRecyclerAdapter;
 import com.magiclon.pocketdoctor.db.DBManager;
@@ -36,6 +37,9 @@ public class SelectCityActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selectcity);
+        ImmersionBar.with(this).statusBarColor(R.color.colorPrimary)
+                .navigationBarColor(R.color.line).fullScreen(false)
+                .init();
         initView();
         initData();
     }
@@ -122,5 +126,11 @@ public class SelectCityActivity extends AppCompatActivity {
      */
     public static String extractLocation(final String city, final String district) {
         return district.contains("县") ? district.substring(0, district.length() - 1) : city.substring(0, city.length() - 1);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();  //不调用该方法，如果界面bar发生改变，在不关闭app的情况下，退出此界面再进入将记忆最后一次bar改变的状态
     }
 }

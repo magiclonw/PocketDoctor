@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .titleBar(findViewById(R.id.toolbar), false)
                 .transparentBar().navigationBarColor(R.color.line).fullScreen(false)
                 .init();
-//        SQLiteDatabase.loadLibs(this);
         dbManager = new DBManager(this);
         dbManager.copyDBFile();
         initView();
@@ -190,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(sintent);
                 break;
             case R.id.ll_main_qiaomen:
-                Intent intent2 = new Intent(MainActivity.this, ZiXunActivity.class);
+                Intent intent2 = new Intent(MainActivity.this, LowsActivity.class);
                 startActivity(intent2);
                 break;
             case R.id.ll_main_zixun:

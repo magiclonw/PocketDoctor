@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.model.Doctor;
-import com.magiclon.pocketdoctor.tools.SharePreferenceUtil;
 
 public class DoctorInfoActivity extends AppCompatActivity {
 

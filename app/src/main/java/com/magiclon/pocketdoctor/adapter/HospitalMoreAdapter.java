@@ -24,7 +24,7 @@ import java.util.List;
 public class HospitalMoreAdapter extends RecyclerView.Adapter<HospitalMoreAdapter.ViewHolder> {
     private List<Hospital> mList;
     private Context mContext;
-    RequestOptions myOptions = new RequestOptions().centerCrop();
+    RequestOptions myOptions = new RequestOptions().centerCrop().placeholder(R.mipmap.fhospital).error(R.mipmap.fhospital);
     String path="https://raw.githubusercontent.com/magiclonw/PocketDoctor/master/pic/";
     public HospitalMoreAdapter(List<Hospital> list, Context context) {
         this.mContext = context;
@@ -61,7 +61,7 @@ public class HospitalMoreAdapter extends RecyclerView.Adapter<HospitalMoreAdapte
         });
         holder.tv_name.setText(mList.get(position).getHname());
         holder.tv_addr.setText(mList.get(position).getDetail());
-        Glide.with(mContext).applyDefaultRequestOptions(myOptions).load(path+mList.get(position).getHid()+".jpg").into(holder.iv_hospital_header);
+        Glide.with(mContext).load(path+mList.get(position).getHid()+".jpg").apply(myOptions).into(holder.iv_hospital_header);
     }
 
     @Override

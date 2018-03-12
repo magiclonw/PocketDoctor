@@ -5,29 +5,25 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
-import com.magiclon.pocketdoctor.adapter.DoctorAdapter;
 import com.magiclon.pocketdoctor.adapter.DoctorMoreAdapter;
 import com.magiclon.pocketdoctor.adapter.WeekAdapter;
 import com.magiclon.pocketdoctor.db.DBManager;
 import com.magiclon.pocketdoctor.model.Doctor;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -56,6 +52,9 @@ public class MoreDoctorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moredoctor);
+        ImmersionBar.with(this).statusBarColor(R.color.colorPrimary)
+                .navigationBarColor(R.color.line).fullScreen(false)
+                .init();
         str_search = (String) getIntent().getExtras().get("info");
         dbManager = new DBManager(this);
         dbManager.copyDBFile();
@@ -183,5 +182,10 @@ public class MoreDoctorActivity extends AppCompatActivity {
             chinese = "日";
         }
         return chinese;
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ImmersionBar.with(this).destroy();  //不调用该方法，如果界面bar发生改变，在不关闭app的情况下，退出此界面再进入将记忆最后一次bar改变的状态
     }
 }
