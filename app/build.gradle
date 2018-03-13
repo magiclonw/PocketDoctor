@@ -1,7 +1,17 @@
+import java.text.SimpleDateFormat
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-
+apply plugin: 'AndResGuard'
 android {
+    signingConfigs {
+        config {
+            keyAlias '123456'
+            keyPassword '123456'
+            storeFile file('E:/keystore/doctorcheck.jks')
+            storePassword '123456'
+        }
+    }
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
@@ -11,12 +21,19 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
+        debug {
+            signingConfig signingConfigs.config
+        }
+    }
+    productFlavors {
     }
 }
 
@@ -35,15 +52,57 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-//    compile 'net.zetetic:android-database-sqlcipher:3.5.9@aar'
+    //    compile 'net.zetetic:android-database-sqlcipher:3.5.9@aar'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     compile 'com.github.MagicLonW:floridftoast:1.0.0'
     compile 'com.ms-square:expandableTextView:0.1.4'
 }
-repositories {
-    mavenCentral()
-    jcenter()
-    maven {
-        url 'https://www.jitpack.io'
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.tencent.mm:AndResGuard-gradle-plugin:1.2.11'
     }
 }
+andResGuard {
+    // mappingFile = file("./resource_mapping.txt")
+    mappingFile = null
+    // It will be invalid when you sign apk with schemeV2
+    use7zip = true
+    useSign = true
+    // it will keep the origin path of your resources when it's true
+    keepRoot = false
+
+    whiteList = [
+            // your icon
+            "R.mipmap.ic_launcher",
+            "R.mipmap.ic_launcher_round"
+
+    ]
+    compressFilePattern = [
+            "*.png",
+            "*.jpg",
+            "*.jpeg",
+            "*.gif",
+            "resources.arsc"
+    ]
+    sevenzip {
+        artifact = 'com.tencent.mm:SevenZip:1.2.11'
+        //path = "/usr/local/bin/7za"
+    }
+
+    /**
+     * Optional: if finalApkBackupPath is null, AndResGuard will overwrite final apk
+     * to the path which assemble[Task] write to
+     **/
+    SimpleDateFormat sdf_convert = new SimpleDateFormat("yyyyMMddHHmmss")
+    finalApkBackupPath = "${project.rootDir}/首府就医-${sdf_convert.format(new Date())}.apk"
+
+    /**
+     * Optional: Specifies the name of the message digest algorithm to user when digesting the entries of JAR file
+     * Only works in V1signing, default value is "SHA1"
+     **/
+    digestalg = "SHA-256"
+}
+
