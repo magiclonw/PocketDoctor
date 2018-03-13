@@ -19,6 +19,7 @@ import com.magiclon.pocketdoctor.model.Department;
 import com.magiclon.pocketdoctor.model.Doctor;
 import com.magiclon.pocketdoctor.tools.DensityUtil;
 import com.magiclon.pocketdoctor.tools.GlideImageLoader;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -42,7 +43,7 @@ public class DeptinfoActivity extends AppCompatActivity {
 
     private Banner banner;
     private TextView tv_title;
-    private TextView tv_info;
+    private ExpandableTextView tv_info;
     private NestedScrollView sv_doctorinfo;
     private ImageView back;
     private Toolbar toolbar;
@@ -134,7 +135,7 @@ public class DeptinfoActivity extends AppCompatActivity {
 
             @Override
             public void subscribe(ObservableEmitter<Object> e) throws Exception {
-                List<Doctor> list = dbManager.getAllDoctorForDept(department.getHname(), department.getDeptname());
+                List<Doctor> list = dbManager.getAllDoctorForDept( department.getDeptid());
                 e.onNext(list);
             }
         }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())

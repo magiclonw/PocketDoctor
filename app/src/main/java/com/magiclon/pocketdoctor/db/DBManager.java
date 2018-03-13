@@ -207,7 +207,7 @@ public class DBManager {
             sqlwhere = " where docid='" + id + "'";
         }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
-        Cursor cursor = db.rawQuery("select * from " + TABLE_NAME_DOCTOR + sqlwhere, null);
+        Cursor cursor = db.rawQuery("select docid,name,level,hname,deptname,info,time from " + TABLE_NAME_DOCTOR + sqlwhere, null);
         List<Doctor> result = new ArrayList<>();
         Doctor doctor;
         while (cursor.moveToNext()) {
@@ -231,10 +231,10 @@ public class DBManager {
      *
      * @return
      */
-    public List<Doctor> getAllDoctorForDept(String hname, String dname) {
+    public List<Doctor> getAllDoctorForDept(String deptid) {
 //        Log.e("***",hname+"****"+dname);
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
-        Cursor cursor = db.rawQuery("select * from " + TABLE_NAME_DOCTOR + " where hospital='" + hname + "' and department='" + dname + "'", null);
+        Cursor cursor = db.rawQuery("select docid,name,level,hname,deptname,info,time from " + TABLE_NAME_DOCTOR + " where deptid='" + deptid + "'", null);
         List<Doctor> result = new ArrayList<>();
         Doctor doctor;
         while (cursor.moveToNext()) {
@@ -348,7 +348,7 @@ public class DBManager {
         }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
 
-        Cursor cursor_doctor = db.rawQuery("select a.docid,a.name,a.level,a.hospital,a.department,a.info,a.time from " + TABLE_NAME_DOCTOR + " as a," + TABLE_NAME_NOTIFY + " as b where a.docid=b.notifyid AND b.keyword like '%" + stringBuilder.toString() + "%' LIMIT 4", null);
+        Cursor cursor_doctor = db.rawQuery("select a.docid,a.name,a.level,a.hname,a.deptname,a.info,a.time from " + TABLE_NAME_DOCTOR + " as a," + TABLE_NAME_NOTIFY + " as b where a.docid=b.notifyid AND b.keyword like '%" + stringBuilder.toString() + "%' LIMIT 4", null);
         List<Doctor> doctors = new ArrayList<>();
         while (cursor_doctor.moveToNext()) {
             String docid = cursor_doctor.getString(0);
@@ -410,7 +410,7 @@ public class DBManager {
         }
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(DB_PATH + DB_NAME, null);
 
-        Cursor cursor_doctor = db.rawQuery("select a.docid,a.name,a.level,a.hospital,a.department,a.info,a.time from " + TABLE_NAME_DOCTOR + " as a," + TABLE_NAME_NOTIFY + " as b where a.docid=b.notifyid and b.type='医生' and b.keyword like '%" + stringBuilder.toString() + "%'" + sqltime, null);
+        Cursor cursor_doctor = db.rawQuery("select a.docid,a.name,a.level,a.hname,a.deptname,a.info,a.time from " + TABLE_NAME_DOCTOR + " as a," + TABLE_NAME_NOTIFY + " as b where a.docid=b.notifyid and b.type='医生' and b.keyword like '%" + stringBuilder.toString() + "%'" + sqltime, null);
         List<Doctor> doctors = new ArrayList<>();
         while (cursor_doctor.moveToNext()) {
             String docid = cursor_doctor.getString(0);

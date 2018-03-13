@@ -11,13 +11,14 @@ import android.widget.TextView;
 import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.model.Doctor;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 public class DoctorInfoActivity extends AppCompatActivity {
 
     private TextView name;
     private TextView level;
     private TextView hospitalanddept;
-    private TextView tv_info;
+    private ExpandableTextView tv_info;
     private TextView tv_time;
     private NestedScrollView sv_doctorinfo;
     private Toolbar toolbar;

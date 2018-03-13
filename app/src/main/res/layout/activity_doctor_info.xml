@@ -113,13 +113,32 @@
                     android:textColor="@color/black"
                     android:textSize="16dp" />
 
-                <TextView
+                <com.ms.square.android.expandabletextview.ExpandableTextView xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/tv_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="14dp" />
+                    expandableTextView:animDuration="200"
+                    expandableTextView:collapseDrawable="@mipmap/arrowup"
+                    expandableTextView:expandDrawable="@mipmap/arrowdown"
+                    expandableTextView:maxCollapsedLines="2">
+
+                    <TextView
+                        android:id="@id/expandable_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textColor="#666666"
+                        android:textSize="14dp" />
+
+                    <ImageButton
+                        android:id="@id/expand_collapse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|bottom"
+                        android:background="@android:color/transparent"
+                        android:padding="10dp" />
+                </com.ms.square.android.expandabletextview.ExpandableTextView>
             </LinearLayout>
 
             <LinearLayout

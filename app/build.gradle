@@ -38,6 +38,7 @@ dependencies {
 //    compile 'net.zetetic:android-database-sqlcipher:3.5.9@aar'
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     compile 'com.github.MagicLonW:floridftoast:1.0.0'
+    compile 'com.ms-square:expandableTextView:0.1.4'
 }
 repositories {
     mavenCentral()

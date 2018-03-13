@@ -69,7 +69,8 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".activity.LowsActivity"></activity>
+        <activity android:name=".activity.LowsActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

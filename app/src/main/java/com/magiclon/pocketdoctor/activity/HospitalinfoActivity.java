@@ -19,6 +19,7 @@ import com.magiclon.pocketdoctor.model.Department;
 import com.magiclon.pocketdoctor.model.Hospital;
 import com.magiclon.pocketdoctor.tools.DensityUtil;
 import com.magiclon.pocketdoctor.tools.GlideImageLoader;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -38,12 +39,12 @@ import io.reactivex.schedulers.Schedulers;
 public class HospitalinfoActivity extends AppCompatActivity {
 
     private Banner banner;
-    private TextView tv_addr;
+    private ExpandableTextView tv_addr;
     private TextView tv_title;
-    private TextView tv_info;
-    private TextView tv_hospital_dept;
-    private TextView tv_hospital_machine;
-    private TextView tv_hospital_guide;
+    private ExpandableTextView tv_info;
+    private ExpandableTextView tv_hospital_dept;
+    private ExpandableTextView tv_hospital_machine;
+    private ExpandableTextView tv_hospital_guide;
     private NestedScrollView sv_doctorinfo;
     private ImageView back;
     private Toolbar toolbar;
