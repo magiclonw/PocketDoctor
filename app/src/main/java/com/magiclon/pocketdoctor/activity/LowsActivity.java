@@ -11,6 +11,9 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.magiclon.pocketdoctor.R;
 import com.magiclon.pocketdoctor.adapter.MyPagerAdapter;
 
+/**
+ * 呼市医保政策法规
+ */
 public class LowsActivity extends AppCompatActivity {
     private ViewPager vp_lows;
     private MyPagerAdapter adapter;

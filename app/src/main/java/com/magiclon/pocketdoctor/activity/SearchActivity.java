@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -51,6 +52,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private TextView tv_search_cancle;
     private EditText edt_search;
     private ImageView iv_search_clear;
+    private ImageView iv_empty;
     private RecyclerView rv_search;
     private RecyclerView rv_history;
     private RecyclerView rv_doctor;
@@ -98,6 +100,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         ll_searchmore = findViewById(R.id.ll_searchmore);
         nest_search = findViewById(R.id.nest_search);
         iv_search_clear = findViewById(R.id.iv_search_clear);
+        iv_empty = findViewById(R.id.iv_empty);
     }
 
     private void addEvents() {
@@ -137,10 +140,16 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                     }
                     nlist.addAll(list);
                     nadapter.notifyDataSetChanged();
-                    rv_search.setVisibility(View.VISIBLE);
                     rv_history.setVisibility(View.GONE);
                     ll_searchmore.setVisibility(View.GONE);
                     nest_search.setVisibility(View.GONE);
+                    if(nlist.size()==0){
+                        rv_search.setVisibility(View.GONE);
+                        iv_empty.setVisibility(View.VISIBLE);
+                    }else {
+                        rv_search.setVisibility(View.VISIBLE);
+                        iv_empty.setVisibility(View.GONE);
+                    }
                 } else {
                     iv_search_clear.setVisibility(View.GONE);
                 }
@@ -317,6 +326,13 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             hosadapter.notifyDataSetChanged();
             dadapter.notifyDataSetChanged();
             deptadapter.notifyDataSetChanged();
+            if(deptlist.size()==0&&dlist.size()==0&&hoslist.size()==0){
+                iv_empty.setVisibility(View.VISIBLE);
+                nest_search.setVisibility(View.GONE);
+            }else {
+                iv_empty.setVisibility(View.GONE);
+                nest_search.setVisibility(View.VISIBLE);
+            }
         } else if ("医生".equals(type)) {
             dlist.clear();
             hoslist.clear();
@@ -325,6 +341,13 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             dadapter.notifyDataSetChanged();
             hosadapter.notifyDataSetChanged();
             deptadapter.notifyDataSetChanged();
+            if(deptlist.size()==0&&dlist.size()==0&&hoslist.size()==0){
+                iv_empty.setVisibility(View.VISIBLE);
+                nest_search.setVisibility(View.GONE);
+            }else {
+                iv_empty.setVisibility(View.GONE);
+                nest_search.setVisibility(View.VISIBLE);
+            }
         } else if ("科室".equals(type)) {
             deptlist.clear();
             dlist.clear();
@@ -333,12 +356,18 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             deptadapter.notifyDataSetChanged();
             hosadapter.notifyDataSetChanged();
             dadapter.notifyDataSetChanged();
+            if(deptlist.size()==0&&dlist.size()==0&&hoslist.size()==0){
+                iv_empty.setVisibility(View.VISIBLE);
+                nest_search.setVisibility(View.GONE);
+            }else {
+                iv_empty.setVisibility(View.GONE);
+                nest_search.setVisibility(View.VISIBLE);
+            }
         } else if ("常见疾病".equals(type)) {
             searchAll(name);
         } else if ("".equals(type)) {
             searchAll(name);
         }
-        nest_search.setVisibility(View.VISIBLE);
         rv_search.setVisibility(View.GONE);
         rv_history.setVisibility(View.GONE);
         ll_searchmore.setVisibility(View.GONE);
@@ -366,6 +395,13 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                         hosadapter.notifyDataSetChanged();
                         dadapter.notifyDataSetChanged();
                         deptadapter.notifyDataSetChanged();
+                        if(deptlist.size()==0&&dlist.size()==0&&hoslist.size()==0){
+                            iv_empty.setVisibility(View.VISIBLE);
+                            nest_search.setVisibility(View.GONE);
+                        }else {
+                            iv_empty.setVisibility(View.GONE);
+                            nest_search.setVisibility(View.VISIBLE);
+                        }
                         mdisposable.dispose();
                     }
                 });
