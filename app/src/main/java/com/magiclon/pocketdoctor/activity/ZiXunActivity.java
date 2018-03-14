@@ -89,13 +89,13 @@ public class ZiXunActivity extends AppCompatActivity implements OnClickListener 
 
     private void initView() {
         // TODO Auto-generated method stub
-        web_zixun = (WebView) findViewById(R.id.web_zixun);
+        web_zixun = findViewById(R.id.web_zixun);
         //        web_zixun.getSettings().setBlockNetworkImage(false);
         //        web_zixun.getSettings().setJavaScriptEnabled(true);
         //        web_zixun.setWebViewClient(new WebViewClient());
-        tv_title = (TextView) findViewById(R.id.tv_title);
+        tv_title = findViewById(R.id.tv_title);
         tv_title.setText("资讯");
-        iv_left = (ImageView) findViewById(R.id.iv_left);
+        iv_left = findViewById(R.id.iv_left);
         iv_left.setVisibility(View.VISIBLE);
         iv_left.setOnClickListener(this);
 
