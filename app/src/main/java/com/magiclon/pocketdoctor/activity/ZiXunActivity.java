@@ -34,7 +34,6 @@ public class ZiXunActivity extends AppCompatActivity implements OnClickListener 
         private final static String url = "http://jiankang.163.com/special/jbbk/";
 //    private final static String url = "http://mc.vip.qq.com/demo/indexv3";
     SonicSessionClientImpl sonicSessionClient = null;
-//    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
