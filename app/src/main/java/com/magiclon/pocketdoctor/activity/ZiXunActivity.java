@@ -31,7 +31,7 @@ public class ZiXunActivity extends AppCompatActivity implements OnClickListener 
     private ImageView iv_left;
     private WebView web_zixun;
     private SonicSession sonicSession;
-        private final static String url = "http://health.qq.com/";
+        private final static String url = "http://jiankang.163.com/special/jbbk/";
 //    private final static String url = "http://mc.vip.qq.com/demo/indexv3";
     SonicSessionClientImpl sonicSessionClient = null;
 //    Intent intent;
